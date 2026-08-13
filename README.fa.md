@@ -42,11 +42,11 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 
 ![راهنمای تصویری نصب و اجرای IP Guard](docs/images/quick-start-fa.png)
 
-![English visual quick-start guide](docs/images/quick-start-en.png)
-
 ## آموزش ویدیویی
 
-ویدیوی راه‌اندازی از مسیر Tray: [مشاهده یا دانلود آموزش ویدیویی](docs/videos/ip-guard-tray-setup.fa.mp4)
+ویدیوی راه‌اندازی از مسیر Tray: [▶ پخش آنلاین آموزش ویدیویی](https://github.com/mnikoie/ip-guard_service/raw/refs/heads/main/docs/videos/ip-guard-tray-setup.fa.mp4)
+
+با انتخاب لینک بالا، ویدیو در Video Player مرورگر پخش می‌شود و لازم نیست آن را دانلود کنید.
 
 ## دربارهٔ ما
 

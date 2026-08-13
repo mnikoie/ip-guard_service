@@ -65,11 +65,11 @@ The illustrated four-step guides are available in English and Persian:
 
 ![English quick-start guide](docs/images/quick-start-en.png)
 
-![Persian quick-start guide](docs/images/quick-start-fa.png)
-
 ## Video tutorial
 
-Tray-based setup walkthrough: [watch or download the video tutorial](docs/videos/ip-guard-tray-setup.fa.mp4)
+Tray-based setup walkthrough: [▶ Watch the video online](https://github.com/mnikoie/ip-guard_service/raw/refs/heads/main/docs/videos/ip-guard-tray-setup.fa.mp4)
+
+The link opens the video directly in the browser's video player; no download is required.
 
 ## About
 
