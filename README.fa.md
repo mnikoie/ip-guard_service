@@ -32,6 +32,10 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 
 راهنمای کامل: [فارسی](docs/INSTALLATION.fa.md) | [English](docs/INSTALLATION.md)
 
+## آموزش تصویری سریع
+
+![راهنمای تصویری نصب و اجرای IP Guard](docs/images/quick-start-fa.png)
+
 ## تنظیمات مهم
 
 | کلید | کاربرد |
@@ -67,6 +71,7 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 - [حریم خصوصی](docs/PRIVACY.md)
 - [مشارکت](CONTRIBUTING.md)
 - [سیاست امنیتی](SECURITY.md)
+- [دربارهٔ پروژه و تماس](docs/ABOUT.fa.md)
 
 ## مجوز
 

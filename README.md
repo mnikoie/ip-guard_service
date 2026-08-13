@@ -53,6 +53,12 @@ flowchart LR
 
 Read the complete [English installation guide](docs/INSTALLATION.md) or [راهنمای نصب فارسی](docs/INSTALLATION.fa.md) before deploying this on a primary workstation.
 
+## Visual quick start
+
+The illustrated four-step guide is available in Persian below and in [the installation documentation](docs/INSTALLATION.fa.md):
+
+![Persian quick-start guide](docs/images/quick-start-fa.png)
+
 ## Configuration
 
 Use [`config.example.json`](config.example.json) as a clean reference. `config.json` is the active configuration.
@@ -113,6 +119,7 @@ This is a notification-area icon rather than a pinned Taskbar button, because it
 - [Security policy](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
+- [About and contact](docs/ABOUT.md)
 
 ## License
 

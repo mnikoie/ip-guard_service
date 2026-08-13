@@ -26,3 +26,4 @@ config.local.json
 # Intermediate images generated while preparing the Windows tray icon.
 /assets/ip-guard-ai-source.png
 /assets/ip-guard-ai.png
+/assets/ip-guard-ai-preview.png
