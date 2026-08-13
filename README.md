@@ -18,7 +18,7 @@ It is useful for applications such as Claude, ChatGPT, Perplexity, Cursor, and s
 - Uses an allowlist: only countries in `trustedCountryCodes` are considered safe.
 - Enforces **fail-closed** behavior: Iran, any untrusted/unknown country, API errors, timeouts, and no network all activate protection.
 - Force-closes configured executables with `taskkill /F /T` and checks again every 100 ms while unsafe.
-- Shows a desktop alert in the signed-in user session, separate from the Windows service.
+- Shows a compact, click-through desktop alert in the signed-in user session, separate from the Windows service.
 - Writes an atomic status file and concise logs; repeated lookup failures are not spammed into the log.
 
 ## Architecture

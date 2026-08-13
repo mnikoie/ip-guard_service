@@ -72,6 +72,8 @@ Get-Service IPGuardService
 
 Overlay فایل `C:\ProgramData\IPGuardService\status.json` را می‌خواند. جدا بودن آن از سرویس عمدی است، چون Windows Service در Session 0 نمی‌تواند رابط گرافیکی عادی روی Desktop کاربر نمایش دهد.
 
+هشدار به شکل کارت کوچک پایینِ سمت راست نمایش داده می‌شود، click-through است و فوکوس کیبورد یا کلیک برنامه‌های دیگر را نمی‌گیرد.
+
 ## ۶. بررسی وضعیت
 
 [`5-view-log.bat`](../5-view-log.bat) را اجرا کنید. این ابزار هر ثانیه فقط آخرین وضعیت را به‌روز می‌کند:

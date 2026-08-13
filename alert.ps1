@@ -1,5 +1,5 @@
-# IP Guard desktop alert. Runs only in the signed-in user's session.
-# It reads the service's shared status file and never controls processes itself.
+﻿# IP Guard desktop alert. This process runs in the signed-in user's session.
+# It only reads the service status and never controls applications itself.
 
 param(
     [string]$StatusFile = 'C:\ProgramData\IPGuardService\status.json'
@@ -8,6 +8,31 @@ param(
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+
+# A non-activating, click-through window prevents the alert from stealing focus
+# or blocking title bars/buttons in other applications.
+Add-Type @'
+using System;
+using System.Windows.Forms;
+
+public class IPGuardOverlayForm : Form
+{
+    private const int WS_EX_TRANSPARENT = 0x00000020;
+    private const int WS_EX_NOACTIVATE = 0x08000000;
+
+    protected override bool ShowWithoutActivation { get { return true; } }
+
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+            CreateParams parameters = base.CreateParams;
+            parameters.ExStyle |= WS_EX_TRANSPARENT | WS_EX_NOACTIVATE;
+            return parameters;
+        }
+    }
+}
+'@
 
 $appDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path
 $pidFile = 'C:\ProgramData\IPGuardService\overlay.pid'
@@ -19,7 +44,7 @@ try {
     if (Test-Path -LiteralPath $regularFontPath) { [void]$fontCollection.AddFontFile($regularFontPath) }
     if (Test-Path -LiteralPath $boldFontPath) { [void]$fontCollection.AddFontFile($boldFontPath) }
 } catch {
-    # The UI remains usable with Tahoma if a font file was damaged.
+    # Tahoma is used only if local font files are unavailable or invalid.
 }
 
 if ($fontCollection.Families.Count -gt 0) {
@@ -28,18 +53,17 @@ if ($fontCollection.Families.Count -gt 0) {
     $fontFamily = New-Object System.Drawing.FontFamily('Tahoma')
 }
 
-$fontTitle = New-Object System.Drawing.Font($fontFamily, 18, [System.Drawing.FontStyle]::Bold)
-$fontBody = New-Object System.Drawing.Font($fontFamily, 11, [System.Drawing.FontStyle]::Regular)
-$fontMeta = New-Object System.Drawing.Font($fontFamily, 9.5, [System.Drawing.FontStyle]::Regular)
-$fontMono = New-Object System.Drawing.Font('Consolas', 11, [System.Drawing.FontStyle]::Bold)
+$fontTitle = New-Object System.Drawing.Font($fontFamily, 13.5, [System.Drawing.FontStyle]::Bold)
+$fontBody = New-Object System.Drawing.Font($fontFamily, 9.5, [System.Drawing.FontStyle]::Regular)
+$fontMeta = New-Object System.Drawing.Font('Consolas', 9.5, [System.Drawing.FontStyle]::Bold)
 
-$form = New-Object System.Windows.Forms.Form
+$form = New-Object IPGuardOverlayForm
 $form.Text = 'IP Guard Alert'
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::None
 $form.ShowInTaskbar = $false
 $form.StartPosition = [System.Windows.Forms.FormStartPosition]::Manual
 $form.TopMost = $true
-$form.BackColor = [System.Drawing.Color]::FromArgb(145, 27, 38)
+$form.BackColor = [System.Drawing.Color]::FromArgb(32, 18, 22)
 $form.RightToLeft = [System.Windows.Forms.RightToLeft]::Yes
 $form.RightToLeftLayout = $true
 $form.Opacity = 0
@@ -47,24 +71,23 @@ $form.Location = New-Object System.Drawing.Point(-32000, -32000)
 
 $root = New-Object System.Windows.Forms.Panel
 $root.Dock = [System.Windows.Forms.DockStyle]::Fill
-$root.BackColor = [System.Drawing.Color]::FromArgb(151, 28, 41)
+$root.BackColor = [System.Drawing.Color]::FromArgb(146, 30, 43)
+$root.Padding = New-Object System.Windows.Forms.Padding(15, 12, 15, 12)
 $form.Controls.Add($root)
 
 $accent = New-Object System.Windows.Forms.Panel
-$accent.Dock = [System.Windows.Forms.DockStyle]::Bottom
-$accent.Height = 4
-$accent.BackColor = [System.Drawing.Color]::FromArgb(247, 195, 77)
+$accent.Dock = [System.Windows.Forms.DockStyle]::Right
+$accent.Width = 5
+$accent.BackColor = [System.Drawing.Color]::FromArgb(248, 199, 79)
 $root.Controls.Add($accent)
 
 $icon = New-Object System.Windows.Forms.Label
 $icon.Text = '!'
 $icon.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
-$icon.Font = New-Object System.Drawing.Font('Tahoma', 27, [System.Drawing.FontStyle]::Bold)
-$icon.ForeColor = [System.Drawing.Color]::FromArgb(117, 20, 30)
-$icon.BackColor = [System.Drawing.Color]::FromArgb(255, 213, 104)
+$icon.Font = New-Object System.Drawing.Font('Tahoma', 19, [System.Drawing.FontStyle]::Bold)
+$icon.ForeColor = [System.Drawing.Color]::FromArgb(115, 20, 31)
+$icon.BackColor = [System.Drawing.Color]::FromArgb(255, 216, 108)
 $icon.AutoSize = $false
-$icon.Size = New-Object System.Drawing.Size(47, 47)
-$icon.Location = New-Object System.Drawing.Point(26, 15)
 $root.Controls.Add($icon)
 
 $title = New-Object System.Windows.Forms.Label
@@ -78,69 +101,63 @@ $root.Controls.Add($title)
 
 $reason = New-Object System.Windows.Forms.Label
 $reason.Text = 'آی‌پی عمومی در فهرست امن تأیید نشده است.'
-$reason.Font = $fontMeta
-$reason.ForeColor = [System.Drawing.Color]::FromArgb(255, 230, 182)
+$reason.Font = $fontBody
+$reason.ForeColor = [System.Drawing.Color]::FromArgb(255, 231, 187)
 $reason.AutoSize = $false
 $reason.TextAlign = [System.Drawing.ContentAlignment]::MiddleRight
 $reason.RightToLeft = [System.Windows.Forms.RightToLeft]::Yes
 $root.Controls.Add($reason)
 
-$infoBox = New-Object System.Windows.Forms.Panel
-$infoBox.BackColor = [System.Drawing.Color]::FromArgb(108, 20, 30)
-$root.Controls.Add($infoBox)
-
-$ipLabel = New-Object System.Windows.Forms.Label
-$ipLabel.Text = 'IP  —'
-$ipLabel.Font = $fontMono
-$ipLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 246, 224)
-$ipLabel.AutoSize = $false
-$ipLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
-$ipLabel.RightToLeft = [System.Windows.Forms.RightToLeft]::No
-$infoBox.Controls.Add($ipLabel)
-
-$countryLabel = New-Object System.Windows.Forms.Label
-$countryLabel.Text = 'COUNTRY  UNKNOWN'
-$countryLabel.Font = $fontMono
-$countryLabel.ForeColor = [System.Drawing.Color]::FromArgb(247, 195, 77)
-$countryLabel.AutoSize = $false
-$countryLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
-$countryLabel.RightToLeft = [System.Windows.Forms.RightToLeft]::No
-$infoBox.Controls.Add($countryLabel)
+$metadata = New-Object System.Windows.Forms.Label
+$metadata.Text = 'IP: UNKNOWN   |   COUNTRY: UNKNOWN'
+$metadata.Font = $fontMeta
+$metadata.ForeColor = [System.Drawing.Color]::FromArgb(255, 246, 224)
+$metadata.AutoSize = $false
+$metadata.TextAlign = [System.Drawing.ContentAlignment]::MiddleLeft
+$metadata.RightToLeft = [System.Windows.Forms.RightToLeft]::No
+$root.Controls.Add($metadata)
 
 function Set-Layout {
-    $screenBounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-    $form.Size = New-Object System.Drawing.Size($screenBounds.Width, 80)
-    $form.Location = New-Object System.Drawing.Point($screenBounds.Left, $screenBounds.Top)
+    $workArea = [System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
+    $width = [Math]::Min(590, $workArea.Width - 32)
+    $height = 92
+    $form.Size = New-Object System.Drawing.Size($width, $height)
+    $form.Location = New-Object System.Drawing.Point(($workArea.Right - $width - 16), ($workArea.Bottom - $height - 16))
 
-    $infoBox.SetBounds(24, 15, 360, 47)
-    $ipLabel.SetBounds(8, 3, 172, 40)
-    $countryLabel.SetBounds(180, 3, 172, 40)
-    $icon.SetBounds($form.ClientSize.Width - 74, 15, 47, 47)
-    $title.SetBounds(410, 13, $form.ClientSize.Width - 510, 31)
-    $reason.SetBounds(410, 43, $form.ClientSize.Width - 510, 20)
+    $icon.SetBounds($width - 63, 22, 34, 34)
+    $title.SetBounds(175, 14, $width - 252, 30)
+    $reason.SetBounds(175, 46, $width - 252, 24)
+    $metadata.SetBounds(18, 23, 145, 39)
 }
 
 function Get-Status {
     try {
         if (-not (Test-Path -LiteralPath $StatusFile)) { return $null }
-        return (Get-Content -LiteralPath $StatusFile -Raw -Encoding UTF8 | ConvertFrom-Json)
+        return Get-Content -LiteralPath $StatusFile -Raw -Encoding UTF8 | ConvertFrom-Json
     } catch {
         return $null
     }
 }
 
+function Get-PersianReason([object]$status) {
+    $rawReason = [string]$status.reason
+    if ($rawReason -match 'Country is not') {
+        return 'کشور آی‌پی در فهرست کشورهای امن نیست.'
+    }
+    if ($rawReason -match 'lookup failed') {
+        return 'امکان تأیید آی‌پی عمومی وجود ندارد؛ محافظت فعال است.'
+    }
+    return 'آی‌پی عمومی در فهرست امن تأیید نشده است.'
+}
+
 function Show-Alert([object]$status) {
     $ip = if ($status.ip) { [string]$status.ip } else { 'UNKNOWN' }
     $country = if ($status.countryCode) { [string]$status.countryCode } else { 'UNKNOWN' }
-    $ipLabel.Text = "IP  $ip"
-    $countryLabel.Text = "COUNTRY  $country"
-    $reason.Text = if ($status.reason) { [string]$status.reason } else { 'آی‌پی عمومی در فهرست امن تأیید نشده است.' }
+    $metadata.Text = "IP: $ip`r`nCOUNTRY: $country"
+    $reason.Text = Get-PersianReason $status
     Set-Layout
     $form.Opacity = 1
     if (-not $form.Visible) { $form.Show() }
-    $form.TopMost = $false
-    $form.TopMost = $true
-    $form.BringToFront()
 }
 
 function Hide-Alert {
@@ -164,7 +181,7 @@ $form.Add_Shown({ $form.Hide(); $timer.Start() })
 $form.Add_FormClosed({
     $timer.Stop()
     try { Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue } catch { }
-    $fontTitle.Dispose(); $fontBody.Dispose(); $fontMeta.Dispose(); $fontMono.Dispose(); $fontCollection.Dispose()
+    $fontTitle.Dispose(); $fontBody.Dispose(); $fontMeta.Dispose(); $fontCollection.Dispose()
 })
 
 Set-Layout

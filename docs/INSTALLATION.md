@@ -70,7 +70,7 @@ Run [`install-overlay.bat`](../install-overlay.bat) from every Windows user acco
 2. Creates a Startup shortcut for the current user.
 3. Starts `alert.ps1` with a hidden PowerShell host.
 
-The alert process reads `C:\ProgramData\IPGuardService\status.json`; it is intentionally separate from the service because Windows services run in Session 0 and cannot safely show normal desktop UI.
+The alert process reads `C:\ProgramData\IPGuardService\status.json`; it is intentionally separate from the service because Windows services run in Session 0 and cannot safely show normal desktop UI. The alert is a compact bottom-right, click-through notification: it never takes keyboard focus and does not prevent interacting with the applications beneath it.
 
 ## 6. Verify the state
 
