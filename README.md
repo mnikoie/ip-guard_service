@@ -67,9 +67,9 @@ The illustrated four-step guides are available in English and Persian:
 
 ## Video tutorial
 
-Tray-based setup walkthrough: [▶ Watch the video online](https://github.com/mnikoie/ip-guard_service/raw/refs/heads/main/docs/videos/ip-guard-tray-setup.fa.mp4)
+Play the Tray-based setup walkthrough directly here:
 
-The link opens the video directly in the browser's video player; no download is required.
+https://github.com/user-attachments/assets/d51167b1-7c07-4184-91af-bfde7d1e5001
 
 ## About
 

@@ -44,9 +44,9 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 
 ## آموزش ویدیویی
 
-ویدیوی راه‌اندازی از مسیر Tray: [▶ پخش آنلاین آموزش ویدیویی](https://github.com/mnikoie/ip-guard_service/raw/refs/heads/main/docs/videos/ip-guard-tray-setup.fa.mp4)
+ویدیوی راه‌اندازی از مسیر Tray را همین‌جا پخش کنید:
 
-با انتخاب لینک بالا، ویدیو در Video Player مرورگر پخش می‌شود و لازم نیست آن را دانلود کنید.
+https://github.com/user-attachments/assets/d51167b1-7c07-4184-91af-bfde7d1e5001
 
 ## دربارهٔ ما
 
