@@ -11,7 +11,7 @@ Add-Type -AssemblyName System.Drawing
 
 # A non-activating, click-through window prevents the alert from stealing focus
 # or blocking title bars/buttons in other applications.
-Add-Type @'
+Add-Type -ReferencedAssemblies 'System.Windows.Forms' -TypeDefinition @'
 using System;
 using System.Windows.Forms;
 
