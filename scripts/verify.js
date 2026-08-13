@@ -12,6 +12,7 @@ const requiredFiles = [
   'tray-manager.ps1',
   'install-tray-manager.bat',
   'uninstall-tray-manager.bat',
+  'assets/ip-guard-ai.ico',
   'install-overlay.bat',
   'README.md',
   'README.fa.md',

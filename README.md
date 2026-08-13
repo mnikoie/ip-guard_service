@@ -92,7 +92,7 @@ The service status and logs are written under `C:\ProgramData\IPGuardService\`:
 
 ## System-tray control menu
 
-`install-tray-manager.bat` places an IP Guard shield icon in the Windows notification area (the area beside the clock; open the `^` overflow menu if Windows hides it). Right-click it for actions that map directly to the included batch files: dependency install, service install/remove/restart, current status, alert install/remove, config editing, and opening the project folder. Operations that modify the Windows service show the normal UAC confirmation.
+`install-tray-manager.bat` places a custom AI-protection icon in the Windows notification area (the area beside the clock; open the `^` overflow menu if Windows hides it). Right-click it for actions that map directly to the included batch files: dependency install, service install/remove/restart, current status, alert install/remove, config editing, and opening the project folder. Operations that modify the Windows service show the normal UAC confirmation.
 
 This is a notification-area icon rather than a pinned Taskbar button, because it stays available without a visible application window and supports a persistent right-click operations menu.
 

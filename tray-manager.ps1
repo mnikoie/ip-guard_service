@@ -112,7 +112,13 @@ $exitItem.Add_Click({ $applicationContext.ExitThread() })
 [void]$menu.Items.Add($exitItem)
 
 $trayIcon = New-Object System.Windows.Forms.NotifyIcon
-$trayIcon.Icon = [System.Drawing.SystemIcons]::Shield
+$iconPath = Join-Path $appDirectory 'assets\ip-guard-ai.ico'
+try {
+    $trayIcon.Icon = New-Object System.Drawing.Icon($iconPath)
+} catch {
+    # Keep the manager usable if a user removes the project icon file.
+    $trayIcon.Icon = [System.Drawing.SystemIcons]::Shield
+}
 $trayIcon.Text = 'IP Guard — در حال بررسی وضعیت'
 $trayIcon.ContextMenuStrip = $menu
 $trayIcon.Visible = $true

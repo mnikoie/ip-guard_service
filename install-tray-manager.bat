@@ -30,6 +30,6 @@ if errorlevel 1 (
 echo Launching the tray manager...
 start "" "%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "%IPGUARD_TRAY%"
 echo.
-echo [OK] Look for the IP Guard shield icon beside the Windows clock.
+echo [OK] Look for the IP Guard AI-protection icon beside the Windows clock.
 echo      Right-click the icon to manage the service and desktop alert.
 pause

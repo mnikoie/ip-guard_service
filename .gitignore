@@ -22,3 +22,7 @@ Thumbs.db
 
 # Keep the published configuration explicit; use config.local.json for personal experiments.
 config.local.json
+
+# Intermediate images generated while preparing the Windows tray icon.
+/assets/ip-guard-ai-source.png
+/assets/ip-guard-ai.png
