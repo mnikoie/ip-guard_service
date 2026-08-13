@@ -17,33 +17,34 @@ public static class IPGuardSimpleIcon
     {
         float s = size / 256f;
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
         g.Clear(Color.Transparent);
 
-        using (var halo = new SolidBrush(Color.FromArgb(75, 42, 214, 255)))
-        using (var background = new SolidBrush(Color.FromArgb(255, 10, 30, 78)))
-        using (var rim = new Pen(Color.FromArgb(255, 83, 225, 255), 12 * s))
-        using (var letters = new SolidBrush(Color.White))
-        using (var spark = new SolidBrush(Color.FromArgb(255, 102, 239, 255)))
-        using (var font = new Font("Segoe UI", 108 * s, FontStyle.Bold, GraphicsUnit.Pixel))
+        using (var halo = new SolidBrush(Color.FromArgb(82, 101, 69, 255)))
+        using (var background = new SolidBrush(Color.FromArgb(255, 31, 22, 66)))
+        using (var rim = new Pen(Color.FromArgb(255, 148, 118, 255), 10 * s))
+        using (var petal = new Pen(Color.FromArgb(255, 245, 246, 255), 27 * s))
+        using (var core = new SolidBrush(Color.FromArgb(255, 129, 242, 221)))
         {
             g.FillEllipse(halo, 14*s, 14*s, 228*s, 228*s);
-            g.FillEllipse(background, 24*s, 24*s, 208*s, 208*s);
-            g.DrawEllipse(rim, 24*s, 24*s, 208*s, 208*s);
+            g.FillEllipse(background, 27*s, 27*s, 202*s, 202*s);
+            g.DrawEllipse(rim, 27*s, 27*s, 202*s, 202*s);
+            petal.StartCap = LineCap.Round;
+            petal.EndCap = LineCap.Round;
 
-            using (var format = new StringFormat())
+            // A custom six-petal "neural iris": distinctive enough at 16px,
+            // while keeping the visual language of modern AI tools.
+            g.TranslateTransform(128*s, 128*s);
+            for (int i = 0; i < 6; i++)
             {
-                format.Alignment = StringAlignment.Center;
-                format.LineAlignment = StringAlignment.Center;
-                g.DrawString("AI", font, letters, new RectangleF(27*s, 30*s, 202*s, 185*s), format);
+                g.DrawBezier(petal,
+                    new PointF(0, -12*s),
+                    new PointF(32*s, -62*s),
+                    new PointF(75*s, -33*s),
+                    new PointF(56*s, 4*s));
+                g.RotateTransform(60);
             }
-
-            PointF[] star = new PointF[] {
-                new PointF(206*s, 38*s), new PointF(213*s, 55*s), new PointF(230*s, 62*s),
-                new PointF(213*s, 69*s), new PointF(206*s, 86*s), new PointF(199*s, 69*s),
-                new PointF(182*s, 62*s), new PointF(199*s, 55*s)
-            };
-            g.FillPolygon(spark, star);
+            g.ResetTransform();
+            g.FillEllipse(core, 113*s, 113*s, 30*s, 30*s);
         }
     }
 

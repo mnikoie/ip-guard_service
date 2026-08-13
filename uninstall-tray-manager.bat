@@ -12,7 +12,7 @@ if not "%~1"=="/quiet" (
 )
 
 if exist "%IPGUARD_PID_FILE%" (
-    for /f "usebackq delims=" %%P in ("%IPGUARD_PID_FILE%") do powershell -NoProfile -Command "$p=Get-CimInstance Win32_Process -Filter ('ProcessId=%%P') -ErrorAction SilentlyContinue; if($p -and $p.CommandLine -and $p.CommandLine -match 'tray-manager\.ps1'){ Stop-Process -Id %%P -Force -ErrorAction SilentlyContinue }"
+    for /f "usebackq delims=" %%P in ("%IPGUARD_PID_FILE%") do powershell -NoProfile -Command "$p=Get-CimInstance Win32_Process -Filter ('ProcessId=%%P') -ErrorAction SilentlyContinue; if($p -and ($p.Name -eq 'IP Guard Tray.exe' -or ($p.CommandLine -and $p.CommandLine -match 'tray-manager\.ps1'))){ Stop-Process -Id %%P -Force -ErrorAction SilentlyContinue }"
     del "%IPGUARD_PID_FILE%" >nul 2>nul
 )
 

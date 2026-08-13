@@ -91,9 +91,9 @@ The raw files are:
 
 ## 7. Optional: install the tray control menu
 
-Run [`install-tray-manager.bat`](../install-tray-manager.bat). It creates a per-user Startup shortcut and launches the custom AI-protection icon in the Windows notification area beside the clock. If it is hidden, open the `^` overflow menu.
+Double-click [`IP Guard Tray.exe`](../IP%20Guard%20Tray.exe) to launch the custom AI-protection icon in the Windows notification area beside the clock, without an extra window. If it is hidden, open the `^` overflow menu. Run [`install-tray-manager.bat`](../install-tray-manager.bat) once to create a per-user Startup shortcut for future Windows sign-ins.
 
-Right-click the icon to run the existing maintenance actions. Service-install, service-restart, and service-removal actions explicitly request UAC elevation; the menu itself does not run elevated all the time.
+Right-click the icon to run the maintenance actions. The menu re-checks the local state every time it opens: `✓` means installed or active, `✕` means absent or inactive, and `!` means attention is needed. Dependency removal affects only this project's `node_modules`; it never removes system-wide Node.js. Service install, start, stop, restart, and removal actions explicitly request UAC elevation; the menu itself does not run elevated all the time.
 
 To remove it, run [`uninstall-tray-manager.bat`](../uninstall-tray-manager.bat).
 

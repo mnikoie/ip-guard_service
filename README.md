@@ -48,7 +48,7 @@ flowchart LR
 2. Run [`1-install-dependencies.bat`](1-install-dependencies.bat).
 3. Run [`2-install-service.bat`](2-install-service.bat) as **Administrator**.
 4. Run [`install-overlay.bat`](install-overlay.bat) once from the Windows account that should see the alert.
-5. Run [`install-tray-manager.bat`](install-tray-manager.bat) to add the IP Guard shield icon beside the Windows clock.
+5. Double-click [`IP Guard Tray.exe`](IP%20Guard%20Tray.exe) to run the AI Guard icon beside the clock. Run [`install-tray-manager.bat`](install-tray-manager.bat) once if you also want it to start automatically at Windows sign-in.
 6. Open [`5-view-log.bat`](5-view-log.bat) to view the current color-coded state.
 
 Read the complete [English installation guide](docs/INSTALLATION.md) or [راهنمای نصب فارسی](docs/INSTALLATION.fa.md) before deploying this on a primary workstation.
@@ -109,7 +109,9 @@ The service status and logs are written under `C:\ProgramData\IPGuardService\`:
 
 ## System-tray control menu
 
-`install-tray-manager.bat` places a custom AI-protection icon in the Windows notification area (the area beside the clock; open the `^` overflow menu if Windows hides it). Right-click it for actions that map directly to the included batch files: dependency install, service install/remove/restart, current status, alert install/remove, config editing, and opening the project folder. Operations that modify the Windows service show the normal UAC confirmation.
+Double-click [`IP Guard Tray.exe`](IP%20Guard%20Tray.exe) to place a custom AI-protection icon in the Windows notification area (the area beside the clock; open the `^` overflow menu if Windows hides it). Right-click it to install/remove project dependencies, install/remove/start/stop/restart the service, show status, install/remove the alert, edit configuration, or open the project folder. Operations that modify the Windows service show the normal UAC confirmation.
+
+The menu checks the actual local state whenever it opens: `✓` means installed or active, `✕` means absent or inactive, and `!` means attention is needed (for example, the service is installed but stopped). Removing dependencies deletes only this project's `node_modules` folder; it never removes system-wide Node.js.
 
 This is a notification-area icon rather than a pinned Taskbar button, because it stays available without a visible application window and supports a persistent right-click operations menu.
 
