@@ -50,6 +50,16 @@ for (const detail of ['Seyed Mohammad Ali Nikoei', '+98 913 267 5400', 'm.nikoie
   if (!installServiceSource.includes(detail)) throw new Error(`install-service.js is missing author detail: ${detail}`);
 }
 
+const dependencyRemovalSource = fs.readFileSync(path.join(root, '0-uninstall-dependencies.bat'), 'utf8');
+if (!dependencyRemovalSource.includes('sc delete "%IPGUARD_SERVICE%"')) {
+  throw new Error('Dependency removal must remove the Windows service when requested.');
+}
+
+const serviceRemovalSource = fs.readFileSync(path.join(root, '3-stop-and-uninstall-service.bat'), 'utf8');
+if (!serviceRemovalSource.includes('sc delete ipguardservice.exe')) {
+  throw new Error('Service removal must use the native Windows service deletion command.');
+}
+
 for (const name of ['config.json', 'config.example.json']) {
   const config = JSON.parse(fs.readFileSync(path.join(root, name), 'utf8'));
   for (const key of requiredConfigKeys) {

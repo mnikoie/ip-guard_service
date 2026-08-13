@@ -332,8 +332,18 @@ internal static class IPGuardTrayManager
     {
         if (DependenciesInstalled())
         {
-            if (Confirm(T("وابستگی‌های همین پروژه (پوشهٔ node_modules) حذف شوند؟\nNode.js ویندوز حذف نمی‌شود.", "Remove this project's node_modules folder?\nSystem-wide Node.js will not be removed."), T("حذف وابستگی‌ها", "Remove dependencies")))
+            if (GetServiceStatus().HasValue)
+            {
+                string warning = T(
+                    "سرویس ویندوز IP Guard هنوز نصب است.\n\nبرای جلوگیری از باقی‌ماندن سرویس خراب، با انتخاب «بله» ابتدا سرویس متوقف و حذف می‌شود و سپس وابستگی‌های همین پروژه پاک می‌شوند.\n\nبا انتخاب «خیر»، هیچ چیزی حذف نمی‌شود.",
+                    "The IP Guard Windows service is still installed.\n\nTo avoid leaving a broken service behind, choose Yes to stop and remove the service first, then remove this project's dependencies.\n\nChoose No to cancel without removing anything.");
+                if (Confirm(warning, T("حذف وابستگی‌ها و سرویس", "Remove dependencies and service")))
+                    StartMaintenance("0-uninstall-dependencies.bat", true, "/remove-service");
+            }
+            else if (Confirm(T("وابستگی‌های همین پروژه (پوشهٔ node_modules) حذف شوند؟\nNode.js ویندوز حذف نمی‌شود.", "Remove this project's node_modules folder?\nSystem-wide Node.js will not be removed."), T("حذف وابستگی‌ها", "Remove dependencies")))
+            {
                 StartMaintenance("0-uninstall-dependencies.bat", false);
+            }
         }
         else StartMaintenance("1-install-dependencies.bat", false);
     }
@@ -371,6 +381,11 @@ internal static class IPGuardTrayManager
 
     private static void StartMaintenance(string fileName, bool requiresAdministrator)
     {
+        StartMaintenance(fileName, requiresAdministrator, "");
+    }
+
+    private static void StartMaintenance(string fileName, bool requiresAdministrator, string arguments)
+    {
         string path = Path.Combine(AppDirectory, fileName);
         if (!File.Exists(path))
         {
@@ -382,7 +397,9 @@ internal static class IPGuardTrayManager
         {
             ProcessStartInfo info = new ProcessStartInfo();
             info.FileName = Environment.GetEnvironmentVariable("ComSpec") ?? "cmd.exe";
-            info.Arguments = "/k \"\"" + path + "\"\"";
+            info.Arguments = String.IsNullOrWhiteSpace(arguments)
+                ? "/k \"\"" + path + "\"\""
+                : "/k \"\"" + path + "\" " + arguments + "\"";
             info.WorkingDirectory = AppDirectory;
             info.UseShellExecute = true;
             if (requiresAdministrator) info.Verb = "runas";

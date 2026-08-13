@@ -15,10 +15,16 @@ if %errorlevel% neq 0 (
 
 echo Stopping service (if running)...
 sc stop ipguardservice.exe >nul 2>nul
+timeout /t 2 /nobreak >nul
 
 echo Uninstalling service...
-node uninstall-service.js
+sc delete ipguardservice.exe >nul
+if errorlevel 1 (
+    echo [ERROR] Service could not be removed. Check the messages above.
+    pause
+    exit /b 1
+)
 
 echo.
-echo [OK] Service stopped and uninstalled (if it existed).
+echo [OK] Service stopped and uninstalled.
 pause
