@@ -7,24 +7,25 @@ $root = $PSScriptRoot
 $source = Join-Path $root 'tray-manager.cs'
 $output = Join-Path $root 'IP Guard Tray.exe'
 $icon = Join-Path $root 'assets\ip-guard-ai.ico'
-$pidFile = Join-Path $env:LOCALAPPDATA 'IPGuardService\tray-manager.pid'
 $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 if (-not (Test-Path -LiteralPath $compiler)) {
     $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework\v4.0.30319\csc.exe'
 }
 if (-not (Test-Path -LiteralPath $compiler)) { throw 'The .NET Framework C# compiler was not found.' }
 
-# A running copy locks the executable on Windows. Stop only the process whose
-# PID was written by this manager before replacing the current build.
-if (Test-Path -LiteralPath $pidFile) {
-    try {
-        $runningPid = [int](Get-Content -LiteralPath $pidFile -Raw)
-        $runningProcess = Get-Process -Id $runningPid -ErrorAction Stop
-        if ($runningProcess.ProcessName -eq 'IP Guard Tray') {
-            Stop-Process -Id $runningPid -Force -ErrorAction Stop
-            Start-Sleep -Milliseconds 350
-        }
-    } catch { }
+# A running copy locks the executable on Windows. Identify the exact executable
+# path instead of trusting a possibly stale PID file, then wait for it to exit.
+$runningCopies = @(Get-Process -Name 'IP Guard Tray' -ErrorAction SilentlyContinue | Where-Object {
+    try { $_.Path -eq $output } catch { $false }
+})
+foreach ($runningCopy in $runningCopies) {
+    Stop-Process -Id $runningCopy.Id -Force -ErrorAction Stop
+    Wait-Process -Id $runningCopy.Id -Timeout 5 -ErrorAction SilentlyContinue
+}
+if (Get-Process -Name 'IP Guard Tray' -ErrorAction SilentlyContinue | Where-Object {
+    try { $_.Path -eq $output } catch { $false }
+}) {
+    throw 'The running IP Guard Tray.exe could not be stopped for rebuilding.'
 }
 
 if (-not $SkipIcon) {

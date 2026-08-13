@@ -144,6 +144,7 @@ internal static class IPGuardTrayManager
         dependencyActionItem.Text = dependenciesInstalled
             ? "✓ وابستگی‌ها نصب است — حذف وابستگی‌ها"
             : "✕ وابستگی‌ها نصب نیست — نصب وابستگی‌ها";
+        dependencyActionItem.ForeColor = dependenciesInstalled ? Color.ForestGreen : Color.Firebrick;
 
         ServiceControllerStatus? serviceStatus = GetServiceStatus();
         bool serviceInstalled = serviceStatus.HasValue;
@@ -165,9 +166,13 @@ internal static class IPGuardTrayManager
         serviceInstallActionItem.Text = serviceInstalled
             ? "✓ سرویس نصب است — توقف و حذف سرویس"
             : "✕ سرویس نصب نیست — نصب سرویس ویندوز";
+        serviceInstallActionItem.ForeColor = serviceInstalled ? Color.ForestGreen : Color.Firebrick;
         startServiceItem.Enabled = serviceInstalled && serviceStatus.Value != ServiceControllerStatus.Running;
         stopServiceItem.Enabled = serviceInstalled && serviceStatus.Value == ServiceControllerStatus.Running;
         restartServiceItem.Enabled = serviceInstalled;
+        startServiceItem.ForeColor = startServiceItem.Enabled ? Color.ForestGreen : Color.DimGray;
+        stopServiceItem.ForeColor = stopServiceItem.Enabled ? Color.DarkOrange : Color.DimGray;
+        restartServiceItem.ForeColor = restartServiceItem.Enabled ? Color.RoyalBlue : Color.DimGray;
 
         bool overlayInstalled = File.Exists(OverlayShortcut);
         bool overlayRunning = overlayInstalled && ProcessFromPidFileIsRunning(OverlayPidFile);
@@ -178,6 +183,7 @@ internal static class IPGuardTrayManager
         overlayActionItem.Text = overlayInstalled
             ? "✓ هشدار دسکتاپ نصب است — حذف هشدار"
             : "✕ هشدار دسکتاپ غیرفعال است — نصب هشدار";
+        overlayActionItem.ForeColor = overlayInstalled ? Color.ForestGreen : Color.Firebrick;
 
         RefreshNetworkState();
     }
