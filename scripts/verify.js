@@ -45,6 +45,11 @@ const requiredConfigKeys = [
   'statusFile',
 ];
 
+const installServiceSource = fs.readFileSync(path.join(root, 'install-service.js'), 'utf8');
+for (const detail of ['Seyed Mohammad Ali Nikoei', '+98 913 267 5400', 'm.nikoie2005@gmail.com']) {
+  if (!installServiceSource.includes(detail)) throw new Error(`install-service.js is missing author detail: ${detail}`);
+}
+
 for (const name of ['config.json', 'config.example.json']) {
   const config = JSON.parse(fs.readFileSync(path.join(root, name), 'utf8'));
   for (const key of requiredConfigKeys) {

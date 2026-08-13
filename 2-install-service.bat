@@ -24,6 +24,16 @@ if not exist "node_modules" (
 echo Installing IPGuardService...
 node install-service.js
 
+if errorlevel 1 (
+    echo.
+    echo [ERROR] Service installation failed. Review the error above.
+    pause
+    exit /b 1
+)
+
+echo Updating service description with author contact information...
+sc description ipguardservice.exe "IP Guard Service - fail-closed public-IP guard. Author: Seyed Mohammad Ali Nikoei; Mobile: +98 913 267 5400; Email: m.nikoie2005@gmail.com" >nul
+
 echo.
 echo [OK] If no errors were shown above, the service "IPGuardService"
 echo      has been installed and started. Check services.msc to confirm.

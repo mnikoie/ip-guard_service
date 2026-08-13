@@ -8,7 +8,7 @@ const path = require('path');
 
 const svc = new Service({
   name: 'IPGuardService',
-  description: 'Fail-closed public-IP guard for configured Windows applications.',
+  description: 'IP Guard Service — fail-closed public-IP guard. Author: Seyed Mohammad Ali Nikoei; Mobile: +98 913 267 5400; Email: m.nikoie2005@gmail.com',
   script: path.join(__dirname, 'index.js'),
   nodeOptions: [],
   workingDirectory: __dirname,
