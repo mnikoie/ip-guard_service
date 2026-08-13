@@ -16,6 +16,8 @@ const requiredFiles = [
   'install-tray-manager.bat',
   'uninstall-tray-manager.bat',
   '0-uninstall-dependencies.bat',
+  'start-service.bat',
+  'stop-service.bat',
   'assets/ip-guard-ai.ico',
   'docs/images/quick-start-fa.png',
   'docs/images/quick-start-en.png',

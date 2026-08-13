@@ -103,13 +103,13 @@ public static class IPGuardInstallGuide
         using (Font footerFont = new Font(family, 16, FontStyle.Regular))
         {
             g.SmoothingMode = SmoothingMode.AntiAlias; g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            Header(g, family, "راهنمای تصویری نصب و اجرای IP Guard", "چهار مرحلهٔ کوتاه برای فعال‌سازی سرویس، هشدار و منوی مدیریت", true);
+            Header(g, family, "راهنمای تصویری راه‌اندازی IP Guard", "فقط EXE را باز کنید و مراحل نصب را یکی‌یکی از منوی آیکون کنار ساعت انجام دهید", true);
             // Persian reading order: top-right, top-left, bottom-right, bottom-left.
-            Card(g, family, 990, 225, 1, "وابستگی‌ها را نصب کنید", "فایل را اجرا کنید و تا پایان نصب npm صبر کنید.", "1-install-dependencies.bat", Color.FromArgb(255, 85, 224, 187), true);
-            Card(g, family, 100, 225, 2, "سرویس را با Administrator نصب کنید", "روی فایل راست‌کلیک کنید و Run as administrator را بزنید.", "2-install-service.bat", Color.FromArgb(255, 112, 193, 255), true);
-            Card(g, family, 990, 565, 3, "هشدار دسکتاپ را فعال کنید", "نوار هشدار فارسی برای کاربر فعلی فعال می‌شود.", "install-overlay.bat", Color.FromArgb(255, 191, 133, 255), true);
-            Card(g, family, 100, 565, 4, "منوی آیکون AI را فعال کنید", "روی آیکون کنار ساعت راست‌کلیک کنید و سرویس را مدیریت کنید.", "install-tray-manager.bat", Color.FromArgb(255, 255, 194, 90), true);
-            Text(g, "نکته: بعد از هر تغییر در config.json، از منوی آیکون گزینهٔ «راه‌اندازی مجدد سرویس» را انتخاب کنید.", footerFont, muted, new RectangleF(100, 932, 1720, 50), StringAlignment.Center, true);
+            Card(g, family, 990, 225, 1, "برنامهٔ IP Guard Tray.exe را باز کنید", "با دوبارکلیک، آیکون IP Guard کنار ساعت ویندوز ظاهر می‌شود.", "IP Guard Tray.exe", Color.FromArgb(255, 85, 224, 187), true);
+            Card(g, family, 100, 225, 2, "روی آیکون کنار ساعت راست‌کلیک کنید", "گزینهٔ «نصب وابستگی‌ها» را بزنید و تا پایان npm صبر کنید.", "Install dependencies", Color.FromArgb(255, 112, 193, 255), true);
+            Card(g, family, 990, 565, 3, "سرویس ویندوز را نصب کنید", "از همان منو «نصب سرویس ویندوز» را انتخاب و درخواست Administrator را تأیید کنید.", "Install Windows service", Color.FromArgb(255, 191, 133, 255), true);
+            Card(g, family, 100, 565, 4, "هشدار دسکتاپ را نصب کنید", "برای نوار هشدار فارسی، «نصب هشدار دسکتاپ» را از منو انتخاب کنید.", "Install desktop alert", Color.FromArgb(255, 255, 194, 90), true);
+            Text(g, "نکته: پیش از نصب سرویس، config.json را بررسی کنید؛ بعد از هر تغییر، از منوی آیکون «راه‌اندازی مجدد سرویس» را بزنید.", footerFont, muted, new RectangleF(100, 932, 1720, 50), StringAlignment.Center, true);
             Text(g, "IP Guard Service  •  Windows 10/11  •  Node.js 18+", footerFont, footer, new RectangleF(100, 1000, 1720, 28), StringAlignment.Center, false);
             bitmap.Save(outputPath, ImageFormat.Png);
         }
@@ -127,13 +127,13 @@ public static class IPGuardInstallGuide
         using (Font footerFont = new Font(family, 16, FontStyle.Regular))
         {
             g.SmoothingMode = SmoothingMode.AntiAlias; g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            Header(g, family, "IP Guard Installation Quick Start", "Four short steps to enable the service, alert, and control menu", false);
+            Header(g, family, "IP Guard Tray Quick Start", "Open the EXE, then complete each installation step from the icon beside the clock", false);
             // English reading order: top-left, top-right, bottom-left, bottom-right.
-            Card(g, family, 100, 225, 1, "Install dependencies", "Run the file and wait for npm installation to finish.", "1-install-dependencies.bat", Color.FromArgb(255, 85, 224, 187), false);
-            Card(g, family, 990, 225, 2, "Install the Windows service", "Right-click the file and choose Run as administrator.", "2-install-service.bat", Color.FromArgb(255, 112, 193, 255), false);
-            Card(g, family, 100, 565, 3, "Enable the desktop alert", "This enables the Persian warning banner for the current user.", "install-overlay.bat", Color.FromArgb(255, 191, 133, 255), false);
-            Card(g, family, 990, 565, 4, "Enable the AI tray menu", "Right-click the icon beside the clock to manage the service.", "install-tray-manager.bat", Color.FromArgb(255, 255, 194, 90), false);
-            Text(g, "Tip: after any config.json change, choose Restart service from the tray menu.", footerFont, muted, new RectangleF(100, 932, 1720, 50), StringAlignment.Center, false);
+            Card(g, family, 100, 225, 1, "Open IP Guard Tray.exe", "Double-click it; the IP Guard icon appears beside the Windows clock.", "IP Guard Tray.exe", Color.FromArgb(255, 85, 224, 187), false);
+            Card(g, family, 990, 225, 2, "Right-click the tray icon", "Choose Install dependencies and wait for npm to finish.", "Install dependencies", Color.FromArgb(255, 112, 193, 255), false);
+            Card(g, family, 100, 565, 3, "Install the Windows service", "Choose Install Windows service from the same menu and approve UAC.", "Install Windows service", Color.FromArgb(255, 191, 133, 255), false);
+            Card(g, family, 990, 565, 4, "Install the desktop alert", "Choose Install desktop alert to enable the warning banner.", "Install desktop alert", Color.FromArgb(255, 255, 194, 90), false);
+            Text(g, "Tip: review config.json before installing the service; after changes, choose Restart service from the tray menu.", footerFont, muted, new RectangleF(100, 932, 1720, 50), StringAlignment.Center, false);
             Text(g, "IP Guard Service  •  Windows 10/11  •  Node.js 18+", footerFont, footer, new RectangleF(100, 1000, 1720, 28), StringAlignment.Center, false);
             bitmap.Save(outputPath, ImageFormat.Png);
         }

@@ -20,6 +20,7 @@ It is useful for applications such as Claude, ChatGPT, Perplexity, Cursor, and s
 - Force-closes configured executables with `taskkill /F /T` and checks again every 100 ms while unsafe.
 - Shows a compact, click-through desktop alert in the signed-in user session, separate from the Windows service.
 - Provides an optional system-tray control menu for installation, service operations, status, logs, and alert management.
+- Includes a bilingual Tray interface: Persian RTL and English LTR, with the selected language remembered per Windows user.
 - Writes an atomic status file and concise logs; repeated lookup failures are not spammed into the log.
 
 ## Architecture
@@ -44,12 +45,12 @@ flowchart LR
 
 ## Quick start
 
-1. Edit [`config.json`](config.json). Review `trustedCountryCodes` and `processesToKill` carefully.
-2. Run [`1-install-dependencies.bat`](1-install-dependencies.bat).
-3. Run [`2-install-service.bat`](2-install-service.bat) as **Administrator**.
-4. Run [`install-overlay.bat`](install-overlay.bat) once from the Windows account that should see the alert.
-5. Double-click [`IP Guard Tray.exe`](IP%20Guard%20Tray.exe) to run the AI Guard icon beside the clock. Run [`install-tray-manager.bat`](install-tray-manager.bat) once if you also want it to start automatically at Windows sign-in.
-6. Open [`5-view-log.bat`](5-view-log.bat) to view the current color-coded state.
+1. If needed, edit [`config.json`](config.json) and review `trustedCountryCodes` and `processesToKill` carefully.
+2. Double-click [`IP Guard Tray.exe`](IP%20Guard%20Tray.exe) to run the AI Guard icon beside the clock.
+3. Right-click the icon and choose **Install dependencies**. Wait for the installation to finish.
+4. Right-click it again and choose **Install Windows service**. Approve the Administrator request.
+5. Right-click it again and choose **Install desktop alert**.
+6. Run [`install-tray-manager.bat`](install-tray-manager.bat) once if you also want the Tray app to start automatically at Windows sign-in.
 
 Read the complete [English installation guide](docs/INSTALLATION.md) or [راهنمای نصب فارسی](docs/INSTALLATION.fa.md) before deploying this on a primary workstation.
 
@@ -90,6 +91,8 @@ After changing `config.json`, run [`4-restart-service.bat`](4-restart-service.ba
 | --- | --- |
 | Install dependencies | `1-install-dependencies.bat` |
 | Install service | `2-install-service.bat` (Administrator) |
+| Start service | `start-service.bat` (Administrator) |
+| Stop service | `stop-service.bat` (Administrator) |
 | Restart service | `4-restart-service.bat` (Administrator) |
 | Display current state | `5-view-log.bat` |
 | Install desktop alert | `install-overlay.bat` |
@@ -107,7 +110,9 @@ The service status and logs are written under `C:\ProgramData\IPGuardService\`:
 
 ## System-tray control menu
 
-Double-click [`IP Guard Tray.exe`](IP%20Guard%20Tray.exe) to place a custom AI-protection icon in the Windows notification area (the area beside the clock; open the `^` overflow menu if Windows hides it). Right-click it to install/remove project dependencies, install/remove/start/stop/restart the service, show status, install/remove the alert, edit configuration, or open the project folder. Operations that modify the Windows service show the normal UAC confirmation.
+Double-click [`IP Guard Tray.exe`](IP%20Guard%20Tray.exe) to place a custom AI-protection icon in the Windows notification area (the area beside the clock; open the `^` overflow menu if Windows hides it). Then right-click it and complete the installation in this order: **Install dependencies**, **Install Windows service**, and **Install desktop alert**. All later actions—start/stop/restart, current status and log, removal, configuration, and opening the project folder—are also available from this menu. Operations that modify the Windows service show the normal UAC confirmation.
+
+The **Language / زبان** submenu switches the Tray UI between English LTR and Persian RTL. The choice is retained for the next launch.
 
 The menu checks the actual local state whenever it opens: `✓` means installed or active, `✕` means absent or inactive, and `!` means attention is needed (for example, the service is installed but stopped). Removing dependencies deletes only this project's `node_modules` folder; it never removes system-wide Node.js.
 

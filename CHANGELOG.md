@@ -8,6 +8,8 @@ All notable changes to this project are documented in this file.
 
 - Standalone `IP Guard Tray.exe` with live install/active state markers, service start/stop controls, and safe project-only dependency removal.
 - Build script and an original six-petal AI guard tray icon.
+- Persian RTL / English LTR switcher in the Tray application, persisted per Windows user.
+- Tray-first bilingual visual installation guides and dedicated start/stop service actions.
 - Bilingual GitHub-ready documentation and installation guides.
 - Configuration example, static validation script, contribution/security policies, issue templates, and third-party notices.
 - Native PowerShell/Vazirmatn desktop overlay replacing the legacy HTA overlay.

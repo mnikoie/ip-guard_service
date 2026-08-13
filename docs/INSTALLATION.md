@@ -95,6 +95,8 @@ Double-click [`IP Guard Tray.exe`](../IP%20Guard%20Tray.exe) to launch the custo
 
 Right-click the icon to run the maintenance actions. The menu re-checks the local state every time it opens: `✓` means installed or active, `✕` means absent or inactive, and `!` means attention is needed. Dependency removal affects only this project's `node_modules`; it never removes system-wide Node.js. Service install, start, stop, restart, and removal actions explicitly request UAC elevation; the menu itself does not run elevated all the time.
 
+For normal installation, use this order in the same menu: **Install dependencies**, then **Install Windows service**, then **Install desktop alert**. The **Language / زبان** submenu switches the Tray interface between English LTR and Persian RTL and remembers the choice.
+
 To remove it, run [`uninstall-tray-manager.bat`](../uninstall-tray-manager.bat).
 
 ## Updating configuration

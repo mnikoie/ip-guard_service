@@ -18,6 +18,7 @@ internal static class IPGuardTrayManager
     private static readonly string RuntimeDirectory = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IPGuardService");
     private static readonly string TrayPidFile = Path.Combine(RuntimeDirectory, "tray-manager.pid");
+    private static readonly string LanguageFile = Path.Combine(RuntimeDirectory, "tray-language.txt");
     private static readonly string OverlayPidFile = @"C:\ProgramData\IPGuardService\overlay.pid";
     private static readonly string StatusFile = @"C:\ProgramData\IPGuardService\status.json";
     private static readonly string StartupDirectory = Path.Combine(
@@ -35,9 +36,17 @@ internal static class IPGuardTrayManager
     private static ToolStripMenuItem restartServiceItem;
     private static ToolStripMenuItem overlayActionItem;
     private static ToolStripMenuItem overlayStatusItem;
+    private static ToolStripMenuItem viewLogItem;
+    private static ToolStripMenuItem editConfigItem;
+    private static ToolStripMenuItem openFolderItem;
+    private static ToolStripMenuItem exitItem;
+    private static ToolStripMenuItem languageMenuItem;
+    private static ToolStripMenuItem persianLanguageItem;
+    private static ToolStripMenuItem englishLanguageItem;
     private static PrivateFontCollection fontCollection;
     private static Font menuFont;
     private static ApplicationContext applicationContext;
+    private static string language = "fa";
 
     [STAThread]
     private static void Main()
@@ -49,6 +58,7 @@ internal static class IPGuardTrayManager
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Directory.CreateDirectory(RuntimeDirectory);
+            language = LoadLanguage();
             File.WriteAllText(TrayPidFile, Process.GetCurrentProcess().Id.ToString());
             try
             {
@@ -81,35 +91,44 @@ internal static class IPGuardTrayManager
 
         menu = new ContextMenuStrip();
         menu.Font = menuFont;
-        menu.RightToLeft = RightToLeft.Yes;
+        menu.RightToLeft = language == "fa" ? RightToLeft.Yes : RightToLeft.No;
         menu.RenderMode = ToolStripRenderMode.System;
         menu.Opening += delegate { RefreshMenu(); };
 
-        networkStatusItem = AddDisabled("وضعیت شبکه: در حال بررسی…", Color.DimGray);
-        serviceStatusItem = AddDisabled("سرویس ویندوز: در حال بررسی…", Color.DimGray);
+        networkStatusItem = AddDisabled(T("وضعیت شبکه: در حال بررسی…", "Network: checking…"), Color.DimGray);
+        serviceStatusItem = AddDisabled(T("سرویس ویندوز: در حال بررسی…", "Windows service: checking…"), Color.DimGray);
         menu.Items.Add(new ToolStripSeparator());
 
         dependencyActionItem = AddAction("", delegate { ToggleDependencies(); });
         serviceInstallActionItem = AddAction("", delegate { ToggleServiceInstall(); });
-        startServiceItem = AddAction("▶ شروع سرویس", delegate { StartMaintenance("start-service.bat", true); });
-        stopServiceItem = AddAction("■ توقف سرویس", delegate { StartMaintenance("stop-service.bat", true); });
-        restartServiceItem = AddAction("↻ راه‌اندازی مجدد سرویس", delegate { StartMaintenance("4-restart-service.bat", true); });
+        startServiceItem = AddAction("", delegate { StartMaintenance("start-service.bat", true); });
+        stopServiceItem = AddAction("", delegate { StartMaintenance("stop-service.bat", true); });
+        restartServiceItem = AddAction("", delegate { StartMaintenance("4-restart-service.bat", true); });
         menu.Items.Add(new ToolStripSeparator());
 
-        overlayStatusItem = AddDisabled("هشدار دسکتاپ: در حال بررسی…", Color.DimGray);
+        overlayStatusItem = AddDisabled(T("هشدار دسکتاپ: در حال بررسی…", "Desktop alert: checking…"), Color.DimGray);
         overlayActionItem = AddAction("", delegate { ToggleOverlay(); });
         menu.Items.Add(new ToolStripSeparator());
 
-        AddAction("نمایش وضعیت و لاگ", delegate { StartMaintenance("5-view-log.bat", false); });
-        AddAction("ویرایش تنظیمات", delegate { OpenConfig(); });
-        AddAction("باز کردن پوشهٔ پروژه", delegate { OpenProjectFolder(); });
+        viewLogItem = AddAction("", delegate { StartMaintenance("5-view-log.bat", false); });
+        editConfigItem = AddAction("", delegate { OpenConfig(); });
+        openFolderItem = AddAction("", delegate { OpenProjectFolder(); });
         menu.Items.Add(new ToolStripSeparator());
-        AddAction("خروج از مدیر IP Guard", delegate { applicationContext.ExitThread(); });
+        languageMenuItem = new ToolStripMenuItem();
+        persianLanguageItem = new ToolStripMenuItem();
+        englishLanguageItem = new ToolStripMenuItem();
+        persianLanguageItem.Click += delegate { SetLanguage("fa"); };
+        englishLanguageItem.Click += delegate { SetLanguage("en"); };
+        languageMenuItem.DropDownItems.Add(persianLanguageItem);
+        languageMenuItem.DropDownItems.Add(englishLanguageItem);
+        menu.Items.Add(languageMenuItem);
+        menu.Items.Add(new ToolStripSeparator());
+        exitItem = AddAction("", delegate { applicationContext.ExitThread(); });
 
         trayIcon = new NotifyIcon();
         try { trayIcon.Icon = new Icon(Path.Combine(AppDirectory, "assets", "ip-guard-ai.ico")); }
         catch { trayIcon.Icon = SystemIcons.Shield; }
-        trayIcon.Text = "IP Guard — در حال بررسی";
+        trayIcon.Text = T("IP Guard — در حال بررسی", "IP Guard — checking status");
         trayIcon.ContextMenuStrip = menu;
         trayIcon.Visible = true;
         trayIcon.DoubleClick += delegate { StartMaintenance("5-view-log.bat", false); };
@@ -138,34 +157,73 @@ internal static class IPGuardTrayManager
         return item;
     }
 
+    private static string T(string persian, string english)
+    {
+        return language == "en" ? english : persian;
+    }
+
+    private static string LoadLanguage()
+    {
+        try
+        {
+            string saved = File.ReadAllText(LanguageFile).Trim().ToLowerInvariant();
+            return saved == "en" ? "en" : "fa";
+        }
+        catch { return "fa"; }
+    }
+
+    private static void SetLanguage(string selectedLanguage)
+    {
+        language = selectedLanguage == "en" ? "en" : "fa";
+        try { File.WriteAllText(LanguageFile, language); }
+        catch { }
+        menu.RightToLeft = language == "fa" ? RightToLeft.Yes : RightToLeft.No;
+        RefreshMenu();
+    }
+
+    private static void RefreshStaticText()
+    {
+        startServiceItem.Text = T("▶ شروع سرویس", "▶ Start service");
+        stopServiceItem.Text = T("■ توقف سرویس", "■ Stop service");
+        restartServiceItem.Text = T("↻ راه‌اندازی مجدد سرویس", "↻ Restart service");
+        viewLogItem.Text = T("نمایش وضعیت و لاگ", "Show current status and log");
+        editConfigItem.Text = T("ویرایش تنظیمات", "Edit configuration");
+        openFolderItem.Text = T("باز کردن پوشهٔ پروژه", "Open project folder");
+        languageMenuItem.Text = T("زبان / Language", "Language / زبان");
+        persianLanguageItem.Text = (language == "fa" ? "✓ " : "") + "فارسی";
+        englishLanguageItem.Text = (language == "en" ? "✓ " : "") + "English";
+        exitItem.Text = T("خروج از مدیر IP Guard", "Exit IP Guard Manager");
+    }
+
     private static void RefreshMenu()
     {
+        RefreshStaticText();
         bool dependenciesInstalled = DependenciesInstalled();
         dependencyActionItem.Text = dependenciesInstalled
-            ? "✓ وابستگی‌ها نصب است — حذف وابستگی‌ها"
-            : "✕ وابستگی‌ها نصب نیست — نصب وابستگی‌ها";
+            ? T("✓ وابستگی‌ها نصب است — حذف وابستگی‌ها", "✓ Dependencies installed — remove dependencies")
+            : T("✕ وابستگی‌ها نصب نیست — نصب وابستگی‌ها", "✕ Dependencies not installed — install dependencies");
         dependencyActionItem.ForeColor = dependenciesInstalled ? Color.ForestGreen : Color.Firebrick;
 
         ServiceControllerStatus? serviceStatus = GetServiceStatus();
         bool serviceInstalled = serviceStatus.HasValue;
         if (!serviceInstalled)
         {
-            serviceStatusItem.Text = "✕ سرویس ویندوز نصب نیست";
+            serviceStatusItem.Text = T("✕ سرویس ویندوز نصب نیست", "✕ Windows service is not installed");
             serviceStatusItem.ForeColor = Color.Firebrick;
         }
         else if (serviceStatus.Value == ServiceControllerStatus.Running)
         {
-            serviceStatusItem.Text = "✓ سرویس ویندوز: در حال اجرا";
+            serviceStatusItem.Text = T("✓ سرویس ویندوز: در حال اجرا", "✓ Windows service: running");
             serviceStatusItem.ForeColor = Color.ForestGreen;
         }
         else
         {
-            serviceStatusItem.Text = "! سرویس ویندوز: " + ServiceStatusText(serviceStatus.Value);
+            serviceStatusItem.Text = T("! سرویس ویندوز: ", "! Windows service: ") + ServiceStatusText(serviceStatus.Value);
             serviceStatusItem.ForeColor = Color.DarkGoldenrod;
         }
         serviceInstallActionItem.Text = serviceInstalled
-            ? "✓ سرویس نصب است — توقف و حذف سرویس"
-            : "✕ سرویس نصب نیست — نصب سرویس ویندوز";
+            ? T("✓ سرویس نصب است — توقف و حذف سرویس", "✓ Service installed — stop and remove service")
+            : T("✕ سرویس نصب نیست — نصب سرویس ویندوز", "✕ Service not installed — install Windows service");
         serviceInstallActionItem.ForeColor = serviceInstalled ? Color.ForestGreen : Color.Firebrick;
         startServiceItem.Enabled = serviceInstalled && serviceStatus.Value != ServiceControllerStatus.Running;
         stopServiceItem.Enabled = serviceInstalled && serviceStatus.Value == ServiceControllerStatus.Running;
@@ -177,12 +235,12 @@ internal static class IPGuardTrayManager
         bool overlayInstalled = File.Exists(OverlayShortcut);
         bool overlayRunning = overlayInstalled && ProcessFromPidFileIsRunning(OverlayPidFile);
         overlayStatusItem.Text = overlayRunning
-            ? "✓ هشدار دسکتاپ: فعال و در حال اجرا"
-            : overlayInstalled ? "! هشدار دسکتاپ: نصب شده، اما اجرا نیست" : "✕ هشدار دسکتاپ: غیرفعال";
+            ? T("✓ هشدار دسکتاپ: فعال و در حال اجرا", "✓ Desktop alert: active and running")
+            : overlayInstalled ? T("! هشدار دسکتاپ: نصب شده، اما اجرا نیست", "! Desktop alert: installed but not running") : T("✕ هشدار دسکتاپ: غیرفعال", "✕ Desktop alert: inactive");
         overlayStatusItem.ForeColor = overlayRunning ? Color.ForestGreen : overlayInstalled ? Color.DarkGoldenrod : Color.Firebrick;
         overlayActionItem.Text = overlayInstalled
-            ? "✓ هشدار دسکتاپ نصب است — حذف هشدار"
-            : "✕ هشدار دسکتاپ غیرفعال است — نصب هشدار";
+            ? T("✓ هشدار دسکتاپ نصب است — حذف هشدار", "✓ Desktop alert installed — remove alert")
+            : T("✕ هشدار دسکتاپ غیرفعال است — نصب هشدار", "✕ Desktop alert inactive — install alert");
         overlayActionItem.ForeColor = overlayInstalled ? Color.ForestGreen : Color.Firebrick;
 
         RefreshNetworkState();
@@ -194,30 +252,30 @@ internal static class IPGuardTrayManager
         try { raw = File.ReadAllText(StatusFile); }
         catch
         {
-            networkStatusItem.Text = "! وضعیت شبکه: هنوز از سرویس دریافت نشده";
+            networkStatusItem.Text = T("! وضعیت شبکه: هنوز از سرویس دریافت نشده", "! Network state: not received from service yet");
             networkStatusItem.ForeColor = Color.DarkGoldenrod;
-            trayIcon.Text = "IP Guard — در انتظار سرویس";
+            trayIcon.Text = T("IP Guard — در انتظار سرویس", "IP Guard — waiting for service");
             return;
         }
         bool trusted = Regex.IsMatch(raw, "\\\"state\\\"\\s*:\\s*\\\"TRUSTED\\\"", RegexOptions.IgnoreCase);
         bool unsafeState = Regex.IsMatch(raw, "\\\"state\\\"\\s*:\\s*\\\"UNSAFE\\\"", RegexOptions.IgnoreCase);
         if (trusted)
         {
-            networkStatusItem.Text = "✓ وضعیت شبکه: امن";
+            networkStatusItem.Text = T("✓ وضعیت شبکه: امن", "✓ Network state: trusted");
             networkStatusItem.ForeColor = Color.ForestGreen;
-            trayIcon.Text = "IP Guard — شبکه امن است";
+            trayIcon.Text = T("IP Guard — شبکه امن است", "IP Guard — trusted network");
         }
         else if (unsafeState)
         {
-            networkStatusItem.Text = "! وضعیت شبکه: محافظت فعال است";
+            networkStatusItem.Text = T("! وضعیت شبکه: محافظت فعال است", "! Network state: protection active");
             networkStatusItem.ForeColor = Color.Firebrick;
-            trayIcon.Text = "IP Guard — محافظت فعال است";
+            trayIcon.Text = T("IP Guard — محافظت فعال است", "IP Guard — protection active");
         }
         else
         {
-            networkStatusItem.Text = "! وضعیت شبکه: در حال به‌روزرسانی";
+            networkStatusItem.Text = T("! وضعیت شبکه: در حال به‌روزرسانی", "! Network state: updating");
             networkStatusItem.ForeColor = Color.DarkGoldenrod;
-            trayIcon.Text = "IP Guard — در حال بررسی";
+            trayIcon.Text = T("IP Guard — در حال بررسی", "IP Guard — checking status");
         }
     }
 
@@ -246,11 +304,11 @@ internal static class IPGuardTrayManager
 
     private static string ServiceStatusText(ServiceControllerStatus status)
     {
-        if (status == ServiceControllerStatus.Stopped) return "متوقف";
-        if (status == ServiceControllerStatus.StartPending) return "در حال شروع";
-        if (status == ServiceControllerStatus.StopPending) return "در حال توقف";
-        if (status == ServiceControllerStatus.Paused) return "متوقف موقت";
-        return "نامشخص";
+        if (status == ServiceControllerStatus.Stopped) return T("متوقف", "stopped");
+        if (status == ServiceControllerStatus.StartPending) return T("در حال شروع", "starting");
+        if (status == ServiceControllerStatus.StopPending) return T("در حال توقف", "stopping");
+        if (status == ServiceControllerStatus.Paused) return T("متوقف موقت", "paused");
+        return T("نامشخص", "unknown");
     }
 
     private static bool ProcessFromPidFileIsRunning(string file)
@@ -269,7 +327,7 @@ internal static class IPGuardTrayManager
     {
         if (DependenciesInstalled())
         {
-            if (Confirm("وابستگی‌های همین پروژه (پوشهٔ node_modules) حذف شوند؟\nNode.js ویندوز حذف نمی‌شود.", "حذف وابستگی‌ها"))
+            if (Confirm(T("وابستگی‌های همین پروژه (پوشهٔ node_modules) حذف شوند؟\nNode.js ویندوز حذف نمی‌شود.", "Remove this project's node_modules folder?\nSystem-wide Node.js will not be removed."), T("حذف وابستگی‌ها", "Remove dependencies")))
                 StartMaintenance("0-uninstall-dependencies.bat", false);
         }
         else StartMaintenance("1-install-dependencies.bat", false);
@@ -279,7 +337,7 @@ internal static class IPGuardTrayManager
     {
         if (GetServiceStatus().HasValue)
         {
-            if (Confirm("سرویس IPGuardService متوقف و حذف شود؟", "حذف سرویس"))
+            if (Confirm(T("سرویس IPGuardService متوقف و حذف شود؟", "Stop and remove IPGuardService?"), T("حذف سرویس", "Remove service")))
                 StartMaintenance("3-stop-and-uninstall-service.bat", true);
         }
         else StartMaintenance("2-install-service.bat", true);
@@ -289,7 +347,7 @@ internal static class IPGuardTrayManager
     {
         if (File.Exists(OverlayShortcut))
         {
-            if (Confirm("هشدار دسکتاپ و اجرای خودکار آن حذف شود؟", "حذف هشدار دسکتاپ"))
+            if (Confirm(T("هشدار دسکتاپ و اجرای خودکار آن حذف شود؟", "Remove the desktop alert and its automatic startup?"), T("حذف هشدار دسکتاپ", "Remove desktop alert")))
                 StartMaintenance("uninstall-overlay.bat", false);
         }
         else StartMaintenance("install-overlay.bat", false);
@@ -298,7 +356,12 @@ internal static class IPGuardTrayManager
     private static bool Confirm(string message, string title)
     {
         return MessageBox.Show(message, title + " — IP Guard", MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
-            MessageBoxDefaultButton.Button2, MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign) == DialogResult.Yes;
+            MessageBoxDefaultButton.Button2, DialogOptions()) == DialogResult.Yes;
+    }
+
+    private static MessageBoxOptions DialogOptions()
+    {
+        return language == "fa" ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0;
     }
 
     private static void StartMaintenance(string fileName, bool requiresAdministrator)
@@ -306,8 +369,8 @@ internal static class IPGuardTrayManager
         string path = Path.Combine(AppDirectory, fileName);
         if (!File.Exists(path))
         {
-            MessageBox.Show("فایل موردنیاز پیدا نشد:\n" + path, "IP Guard", MessageBoxButtons.OK, MessageBoxIcon.Error,
-                MessageBoxDefaultButton.Button1, MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign);
+            MessageBox.Show(T("فایل موردنیاز پیدا نشد:\n", "Required file was not found:\n") + path, "IP Guard", MessageBoxButtons.OK, MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1, DialogOptions());
             return;
         }
         try
@@ -323,7 +386,8 @@ internal static class IPGuardTrayManager
         catch (System.ComponentModel.Win32Exception) { }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "IP Guard", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(ex.Message, "IP Guard", MessageBoxButtons.OK, MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1, DialogOptions());
         }
     }
 
