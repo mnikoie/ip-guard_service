@@ -15,11 +15,9 @@ echo.
 
 sc query "%IPGUARD_SERVICE%" >nul 2>&1
 if %errorlevel% equ 0 if "%IPGUARD_REMOVE_SERVICE%"=="0" (
-    echo [WARNING] IPGuardService is still installed.
-    echo To avoid leaving a broken service behind, remove dependencies from
-    echo the IP Guard Tray menu and confirm removal of the service too.
-    pause
-    exit /b 1
+    echo [WARNING] IPGuardService is still installed and will be kept.
+    echo Removing dependencies will prevent the service from starting again
+    echo until dependencies are installed again from the IP Guard Tray menu.
 )
 
 if "%IPGUARD_REMOVE_SERVICE%"=="1" (

@@ -127,6 +127,8 @@ The **Language / زبان** submenu switches the Tray UI between English LTR and
 
 The menu checks the actual local state whenever it opens: `✓` means installed or active, `✕` means absent or inactive, and `!` means attention is needed (for example, the service is installed but stopped). Removing dependencies deletes only this project's `node_modules` folder; it never removes system-wide Node.js.
 
+When removing dependencies while the service is still installed, choose **Yes** to remove both the service and dependencies, **No** to remove dependencies only and keep the service, or **Cancel** to change nothing.
+
 This is a notification-area icon rather than a pinned Taskbar button, because it stays available without a visible application window and supports a persistent right-click operations menu.
 
 ## Safety notes

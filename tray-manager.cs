@@ -335,10 +335,13 @@ internal static class IPGuardTrayManager
             if (GetServiceStatus().HasValue)
             {
                 string warning = T(
-                    "سرویس ویندوز IP Guard هنوز نصب است.\n\nبرای جلوگیری از باقی‌ماندن سرویس خراب، با انتخاب «بله» ابتدا سرویس متوقف و حذف می‌شود و سپس وابستگی‌های همین پروژه پاک می‌شوند.\n\nبا انتخاب «خیر»، هیچ چیزی حذف نمی‌شود.",
-                    "The IP Guard Windows service is still installed.\n\nTo avoid leaving a broken service behind, choose Yes to stop and remove the service first, then remove this project's dependencies.\n\nChoose No to cancel without removing anything.");
-                if (Confirm(warning, T("حذف وابستگی‌ها و سرویس", "Remove dependencies and service")))
+                    "سرویس ویندوز IP Guard هنوز نصب است.\n\nبله: ابتدا سرویس را متوقف و حذف می‌کند، سپس وابستگی‌ها را پاک می‌کند.\nخیر: فقط وابستگی‌های همین پروژه را پاک می‌کند و سرویس را نگه می‌دارد.\nلغو: هیچ تغییری نمی‌دهد.",
+                    "The IP Guard Windows service is still installed.\n\nYes: stop and remove the service, then remove dependencies.\nNo: remove only this project's dependencies and keep the service.\nCancel: do not change anything.");
+                DialogResult choice = ConfirmChoice(warning, T("حذف وابستگی‌ها", "Remove dependencies"));
+                if (choice == DialogResult.Yes)
                     StartMaintenance("0-uninstall-dependencies.bat", true, "/remove-service");
+                else if (choice == DialogResult.No)
+                    StartMaintenance("0-uninstall-dependencies.bat", false);
             }
             else if (Confirm(T("وابستگی‌های همین پروژه (پوشهٔ node_modules) حذف شوند؟\nNode.js ویندوز حذف نمی‌شود.", "Remove this project's node_modules folder?\nSystem-wide Node.js will not be removed."), T("حذف وابستگی‌ها", "Remove dependencies")))
             {
@@ -372,6 +375,12 @@ internal static class IPGuardTrayManager
     {
         return MessageBox.Show(message, title + " — IP Guard", MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
             MessageBoxDefaultButton.Button2, DialogOptions()) == DialogResult.Yes;
+    }
+
+    private static DialogResult ConfirmChoice(string message, string title)
+    {
+        return MessageBox.Show(message, title + " — IP Guard", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning,
+            MessageBoxDefaultButton.Button3, DialogOptions());
     }
 
     private static MessageBoxOptions DialogOptions()

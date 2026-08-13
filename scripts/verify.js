@@ -54,6 +54,9 @@ const dependencyRemovalSource = fs.readFileSync(path.join(root, '0-uninstall-dep
 if (!dependencyRemovalSource.includes('sc delete "%IPGUARD_SERVICE%"')) {
   throw new Error('Dependency removal must remove the Windows service when requested.');
 }
+if (!dependencyRemovalSource.includes('will be kept')) {
+  throw new Error('Dependency removal must support keeping an installed service.');
+}
 
 const serviceRemovalSource = fs.readFileSync(path.join(root, '3-stop-and-uninstall-service.bat'), 'utf8');
 if (!serviceRemovalSource.includes('sc delete ipguardservice.exe')) {
