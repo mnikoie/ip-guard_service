@@ -44,6 +44,10 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 
 ![English visual quick-start guide](docs/images/quick-start-en.png)
 
+## آموزش ویدیویی
+
+ویدیوی راه‌اندازی از مسیر Tray: [مشاهده یا دانلود آموزش ویدیویی](docs/videos/ip-guard-tray-setup.fa.mp4)
+
 ## دربارهٔ ما
 
 توسعه‌دهنده: **سید محمد علی نیکوئی**
