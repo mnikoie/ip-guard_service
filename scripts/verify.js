@@ -19,6 +19,8 @@ const requiredFiles = [
   'start-service.bat',
   'stop-service.bat',
   'assets/ip-guard-ai.ico',
+  'assets/ip-guard-user.png',
+  'scripts/convert-user-tray-icon.ps1',
   'docs/images/quick-start-fa.png',
   'docs/images/quick-start-en.png',
   'docs/ABOUT.md',

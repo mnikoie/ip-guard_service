@@ -10,6 +10,7 @@ All notable changes to this project are documented in this file.
 - Build script and an original six-petal AI guard tray icon.
 - Persian RTL / English LTR switcher in the Tray application, persisted per Windows user.
 - Tray-first bilingual visual installation guides and dedicated start/stop service actions.
+- User-supplied Tray icon support, service-name detection compatible with node-windows, and an in-app developer contact dialog.
 - Bilingual GitHub-ready documentation and installation guides.
 - Configuration example, static validation script, contribution/security policies, issue templates, and third-party notices.
 - Native PowerShell/Vazirmatn desktop overlay replacing the legacy HTA overlay.

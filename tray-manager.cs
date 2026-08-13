@@ -13,7 +13,8 @@ using System.Windows.Forms;
 
 internal static class IPGuardTrayManager
 {
-    private const string ServiceName = "IPGuardService";
+    private const string ServiceName = "ipguardservice.exe";
+    private const string ServiceDisplayName = "IPGuardService";
     private static readonly string AppDirectory = Path.GetDirectoryName(Application.ExecutablePath);
     private static readonly string RuntimeDirectory = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IPGuardService");
@@ -40,6 +41,7 @@ internal static class IPGuardTrayManager
     private static ToolStripMenuItem editConfigItem;
     private static ToolStripMenuItem openFolderItem;
     private static ToolStripMenuItem exitItem;
+    private static ToolStripMenuItem aboutItem;
     private static ToolStripMenuItem languageMenuItem;
     private static ToolStripMenuItem persianLanguageItem;
     private static ToolStripMenuItem englishLanguageItem;
@@ -113,6 +115,7 @@ internal static class IPGuardTrayManager
         viewLogItem = AddAction("", delegate { StartMaintenance("5-view-log.bat", false); });
         editConfigItem = AddAction("", delegate { OpenConfig(); });
         openFolderItem = AddAction("", delegate { OpenProjectFolder(); });
+        aboutItem = AddAction("", delegate { ShowAbout(); });
         menu.Items.Add(new ToolStripSeparator());
         languageMenuItem = new ToolStripMenuItem();
         persianLanguageItem = new ToolStripMenuItem();
@@ -193,6 +196,7 @@ internal static class IPGuardTrayManager
         persianLanguageItem.Text = (language == "fa" ? "✓ " : "") + "فارسی";
         englishLanguageItem.Text = (language == "en" ? "✓ " : "") + "English";
         exitItem.Text = T("خروج از مدیر IP Guard", "Exit IP Guard Manager");
+        aboutItem.Text = T("دربارهٔ من", "About the developer");
     }
 
     private static void RefreshMenu()
@@ -294,7 +298,8 @@ internal static class IPGuardTrayManager
             {
                 using (service)
                 {
-                    if (String.Equals(service.ServiceName, ServiceName, StringComparison.OrdinalIgnoreCase)) return service.Status;
+                    if (String.Equals(service.ServiceName, ServiceName, StringComparison.OrdinalIgnoreCase)
+                        || String.Equals(service.DisplayName, ServiceDisplayName, StringComparison.OrdinalIgnoreCase)) return service.Status;
                 }
             }
         }
@@ -400,6 +405,15 @@ internal static class IPGuardTrayManager
     private static void OpenProjectFolder()
     {
         Process.Start("explorer.exe", "\"" + AppDirectory + "\"");
+    }
+
+    private static void ShowAbout()
+    {
+        string message = T(
+            "IP Guard Service\n\nتوسعه‌دهنده: سید محمد علی نیکوئی\nتلفن: 09132675400\nایمیل: m.nikoie2005@gmail.com\n\nابزار محافظت از برنامه‌ها هنگام تغییر ناخواستهٔ موقعیت IP.",
+            "IP Guard Service\n\nDeveloper: Seyed Mohammad Ali Nikoei\nPhone: +98 913 267 5400\nEmail: m.nikoie2005@gmail.com\n\nA desktop-app guard for unexpected public-IP location changes.");
+        MessageBox.Show(message, T("دربارهٔ من — IP Guard", "About the developer — IP Guard"), MessageBoxButtons.OK,
+            MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, DialogOptions());
     }
 
     private static void TryDelete(string path)

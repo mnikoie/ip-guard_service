@@ -14,7 +14,7 @@ if %errorlevel% neq 0 (
 )
 
 echo Stopping service (if running)...
-net stop IPGuardService >nul 2>nul
+sc stop ipguardservice.exe >nul 2>nul
 
 echo Uninstalling service...
 node uninstall-service.js

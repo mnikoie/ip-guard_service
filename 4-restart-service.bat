@@ -14,10 +14,10 @@ if %errorlevel% neq 0 (
 )
 
 echo Stopping IPGuardService...
-net stop IPGuardService >nul 2>nul
+sc stop ipguardservice.exe >nul 2>nul
 
 echo Starting IPGuardService...
-net start IPGuardService
+sc start ipguardservice.exe
 
 echo.
 echo [OK] Restart command sent. Check services.msc for status.

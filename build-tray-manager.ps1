@@ -32,7 +32,12 @@ if (-not $SkipIcon) {
     # The icon generator uses the Windows .NET Framework drawing stack; invoke
     # Windows PowerShell explicitly so this also works when called from pwsh 7.
     $windowsPowerShell = Join-Path $env:WINDIR 'System32\WindowsPowerShell\v1.0\powershell.exe'
-    & $windowsPowerShell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'scripts\generate-tray-icon.ps1')
+    $userIcon = Join-Path $root 'assets\ip-guard-user.png'
+    if (Test-Path -LiteralPath $userIcon) {
+        & $windowsPowerShell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'scripts\convert-user-tray-icon.ps1') -InputPath $userIcon -OutputPath $icon
+    } else {
+        & $windowsPowerShell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'scripts\generate-tray-icon.ps1')
+    }
     if ($LASTEXITCODE -ne 0) { throw 'Tray icon generation failed.' }
 }
 & $compiler /nologo /target:winexe /optimize+ /win32icon:"$icon" /out:"$output" /r:System.dll /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.ServiceProcess.dll "$source"

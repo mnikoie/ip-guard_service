@@ -43,14 +43,19 @@ flowchart LR
 - PowerShell 5.1 or newer for the optional desktop alert and status viewer
 - Internet access for IP-country lookup
 
-## Quick start
+## Install using only the Tray icon
 
-1. If needed, edit [`config.json`](config.json) and review `trustedCountryCodes` and `processesToKill` carefully.
-2. Double-click [`IP Guard Tray.exe`](IP%20Guard%20Tray.exe) to run the AI Guard icon beside the clock.
-3. Right-click the icon and choose **Install dependencies**. Wait for the installation to finish.
-4. Right-click it again and choose **Install Windows service**. Approve the Administrator request.
-5. Right-click it again and choose **Install desktop alert**.
-6. Run [`install-tray-manager.bat`](install-tray-manager.bat) once if you also want the Tray app to start automatically at Windows sign-in.
+You do not need to open the `.bat` files individually. Complete the normal setup from the menu on the icon beside the clock.
+
+1. Before installing the service, edit [`config.json`](config.json) if needed and review `trustedCountryCodes` and `processesToKill`.
+2. Double-click [`IP Guard Tray.exe`](IP%20Guard%20Tray.exe).
+3. If the icon is not immediately visible beside the clock, open the `^` overflow area, then right-click the IP Guard icon.
+4. Select **Install dependencies** and wait for its console window to report success.
+5. Right-click the icon again and select **Install Windows service**. Approve the Windows Administrator request.
+6. After installation, the menu should show `✓ Windows service: running`. Choose **Install desktop alert** if you also want the graphical warning banner.
+7. **Show current status and log** displays the current state. Start, stop, restart, and removal are all available from the same menu.
+
+Run [`install-tray-manager.bat`](install-tray-manager.bat) once if you also want the Tray app to start automatically at Windows sign-in.
 
 Read the complete [English installation guide](docs/INSTALLATION.md) or [راهنمای نصب فارسی](docs/INSTALLATION.fa.md) before deploying this on a primary workstation.
 
@@ -59,6 +64,8 @@ Read the complete [English installation guide](docs/INSTALLATION.md) or [راه�
 The illustrated four-step guides are available in English and Persian:
 
 ![English quick-start guide](docs/images/quick-start-en.png)
+
+![Persian quick-start guide](docs/images/quick-start-fa.png)
 
 ## About
 
