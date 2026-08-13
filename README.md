@@ -59,8 +59,6 @@ The illustrated four-step guides are available in English and Persian:
 
 ![English quick-start guide](docs/images/quick-start-en.png)
 
-![Persian quick-start guide](docs/images/quick-start-fa.png)
-
 ## About
 
 Developed by **Seyed Mohammad Ali Nikoei**.
