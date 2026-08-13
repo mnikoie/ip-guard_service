@@ -148,6 +148,7 @@ This is a notification-area icon rather than a pinned Taskbar button, because it
 - [Security policy](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
+- [تاریخچهٔ تغییرات فارسی](CHANGELOG.fa.md)
 - [About and contact](docs/ABOUT.md)
 
 ## License

@@ -25,6 +25,7 @@ internal static class IPGuardTrayManager
     private static readonly string StartupDirectory = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.Startup));
     private static readonly string OverlayShortcut = Path.Combine(StartupDirectory, "IPGuardAlert.lnk");
+    private static readonly string TrayStartupShortcut = Path.Combine(StartupDirectory, "IPGuardTrayManager.lnk");
 
     private static NotifyIcon trayIcon;
     private static ContextMenuStrip menu;
@@ -37,6 +38,8 @@ internal static class IPGuardTrayManager
     private static ToolStripMenuItem restartServiceItem;
     private static ToolStripMenuItem overlayActionItem;
     private static ToolStripMenuItem overlayStatusItem;
+    private static ToolStripMenuItem trayStartupStatusItem;
+    private static ToolStripMenuItem trayStartupActionItem;
     private static ToolStripMenuItem viewLogItem;
     private static ToolStripMenuItem editConfigItem;
     private static ToolStripMenuItem openFolderItem;
@@ -110,6 +113,10 @@ internal static class IPGuardTrayManager
 
         overlayStatusItem = AddDisabled(T("هشدار دسکتاپ: در حال بررسی…", "Desktop alert: checking…"), Color.DimGray);
         overlayActionItem = AddAction("", delegate { ToggleOverlay(); });
+        menu.Items.Add(new ToolStripSeparator());
+
+        trayStartupStatusItem = AddDisabled("", Color.DimGray);
+        trayStartupActionItem = AddAction("", delegate { ToggleTrayStartup(); });
         menu.Items.Add(new ToolStripSeparator());
 
         viewLogItem = AddAction("", delegate { StartMaintenance("5-view-log.bat", false); });
@@ -247,6 +254,16 @@ internal static class IPGuardTrayManager
             : T("✕ هشدار دسکتاپ غیرفعال است — نصب هشدار", "✕ Desktop alert inactive — install alert");
         overlayActionItem.ForeColor = overlayInstalled ? Color.ForestGreen : Color.Firebrick;
 
+        bool trayStartsWithWindows = File.Exists(TrayStartupShortcut);
+        trayStartupStatusItem.Text = trayStartsWithWindows
+            ? T("✓ اجرای خودکار Tray: فعال", "✓ Tray auto-start: enabled")
+            : T("✕ اجرای خودکار Tray: غیرفعال", "✕ Tray auto-start: disabled");
+        trayStartupStatusItem.ForeColor = trayStartsWithWindows ? Color.ForestGreen : Color.Firebrick;
+        trayStartupActionItem.Text = trayStartsWithWindows
+            ? T("✓ اجرای خودکار فعال است — حذف از Startup", "✓ Auto-start enabled — remove from Startup")
+            : T("✕ اجرای خودکار غیرفعال است — افزودن به Startup", "✕ Auto-start disabled — add to Startup");
+        trayStartupActionItem.ForeColor = trayStartsWithWindows ? Color.DarkOrange : Color.ForestGreen;
+
         RefreshNetworkState();
     }
 
@@ -371,6 +388,35 @@ internal static class IPGuardTrayManager
         else StartMaintenance("install-overlay.bat", false);
     }
 
+    private static void ToggleTrayStartup()
+    {
+        if (File.Exists(TrayStartupShortcut))
+        {
+            if (!Confirm(T("اجرای خودکار IP Guard Tray هنگام ورود به ویندوز غیرفعال شود؟", "Disable IP Guard Tray automatic startup when signing in to Windows?"), T("حذف از Startup", "Remove from Startup"))) return;
+            try
+            {
+                File.Delete(TrayStartupShortcut);
+                RefreshMenu();
+            }
+            catch (Exception ex) { ShowError(ex.Message); }
+            return;
+        }
+
+        try
+        {
+            Type shellType = Type.GetTypeFromProgID("WScript.Shell");
+            dynamic shell = Activator.CreateInstance(shellType);
+            dynamic shortcut = shell.CreateShortcut(TrayStartupShortcut);
+            shortcut.TargetPath = Application.ExecutablePath;
+            shortcut.WorkingDirectory = AppDirectory;
+            shortcut.WindowStyle = 7;
+            shortcut.Description = "IP Guard service control menu";
+            shortcut.Save();
+            RefreshMenu();
+        }
+        catch (Exception ex) { ShowError(ex.Message); }
+    }
+
     private static bool Confirm(string message, string title)
     {
         return MessageBox.Show(message, title + " — IP Guard", MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
@@ -398,8 +444,7 @@ internal static class IPGuardTrayManager
         string path = Path.Combine(AppDirectory, fileName);
         if (!File.Exists(path))
         {
-            MessageBox.Show(T("فایل موردنیاز پیدا نشد:\n", "Required file was not found:\n") + path, "IP Guard", MessageBoxButtons.OK, MessageBoxIcon.Error,
-                MessageBoxDefaultButton.Button1, DialogOptions());
+            ShowError(T("فایل موردنیاز پیدا نشد:\n", "Required file was not found:\n") + path);
             return;
         }
         try
@@ -417,8 +462,7 @@ internal static class IPGuardTrayManager
         catch (System.ComponentModel.Win32Exception) { }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "IP Guard", MessageBoxButtons.OK, MessageBoxIcon.Error,
-                MessageBoxDefaultButton.Button1, DialogOptions());
+            ShowError(ex.Message);
         }
     }
 
@@ -440,6 +484,12 @@ internal static class IPGuardTrayManager
             "IP Guard Service\n\nDeveloper: Seyed Mohammad Ali Nikoei\nPhone: +98 913 267 5400\nEmail: m.nikoie2005@gmail.com\n\nA desktop-app guard for unexpected public-IP location changes.");
         MessageBox.Show(message, T("دربارهٔ من — IP Guard", "About the developer — IP Guard"), MessageBoxButtons.OK,
             MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, DialogOptions());
+    }
+
+    private static void ShowError(string message)
+    {
+        MessageBox.Show(message, "IP Guard", MessageBoxButtons.OK, MessageBoxIcon.Error,
+            MessageBoxDefaultButton.Button1, DialogOptions());
     }
 
     private static void TryDelete(string path)

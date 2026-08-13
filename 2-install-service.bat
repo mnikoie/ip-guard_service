@@ -35,6 +35,13 @@ echo Updating service description with author contact information...
 sc description ipguardservice.exe "IP Guard Service - fail-closed public-IP guard. Author: Seyed Mohammad Ali Nikoei; Mobile: +98 913 267 5400; Email: m.nikoie2005@gmail.com" >nul
 
 echo.
-echo [OK] If no errors were shown above, the service "IPGuardService"
-echo      has been installed and started. Check services.msc to confirm.
+sc query ipguardservice.exe >nul 2>&1
+if errorlevel 1 (
+    echo [ERROR] Windows did not register IPGuardService. Run this command again as Administrator.
+    pause
+    exit /b 1
+)
+
+echo [OK] IPGuardService is registered in Windows and has been started.
+echo      The installer also repairs stale files left after moving the project folder.
 pause

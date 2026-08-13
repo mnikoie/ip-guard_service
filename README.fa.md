@@ -99,6 +99,7 @@ https://github.com/user-attachments/assets/d51167b1-7c07-4184-91af-bfde7d1e5001
 - [مشارکت](CONTRIBUTING.md)
 - [سیاست امنیتی](SECURITY.md)
 - [دربارهٔ پروژه و تماس](docs/ABOUT.fa.md)
+- [تاریخچهٔ تغییرات](CHANGELOG.fa.md)
 
 ## مجوز
 

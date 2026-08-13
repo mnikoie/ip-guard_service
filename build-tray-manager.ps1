@@ -40,6 +40,6 @@ if (-not $SkipIcon) {
     }
     if ($LASTEXITCODE -ne 0) { throw 'Tray icon generation failed.' }
 }
-& $compiler /nologo /target:winexe /optimize+ /win32icon:"$icon" /out:"$output" /r:System.dll /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.ServiceProcess.dll "$source"
+& $compiler /nologo /target:winexe /optimize+ /win32icon:"$icon" /out:"$output" /r:System.dll /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.ServiceProcess.dll /r:Microsoft.CSharp.dll "$source"
 if ($LASTEXITCODE -ne 0) { throw 'Tray manager compilation failed.' }
 Write-Host "Built: $output" -ForegroundColor Green

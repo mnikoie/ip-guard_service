@@ -25,6 +25,8 @@ const requiredFiles = [
   'docs/images/quick-start-en.png',
   'docs/ABOUT.md',
   'docs/ABOUT.fa.md',
+  'CHANGELOG.md',
+  'CHANGELOG.fa.md',
   'install-overlay.bat',
   'README.md',
   'README.fa.md',
@@ -49,6 +51,9 @@ const installServiceSource = fs.readFileSync(path.join(root, 'install-service.js
 for (const detail of ['Seyed Mohammad Ali Nikoei', '+98 913 267 5400', 'm.nikoie2005@gmail.com']) {
   if (!installServiceSource.includes(detail)) throw new Error(`install-service.js is missing author detail: ${detail}`);
 }
+for (const detail of ['serviceExists()', 'Removing stale local service files', 'sc.exe']) {
+  if (!installServiceSource.includes(detail)) throw new Error(`install-service.js is missing service repair logic: ${detail}`);
+}
 
 const dependencyRemovalSource = fs.readFileSync(path.join(root, '0-uninstall-dependencies.bat'), 'utf8');
 if (!dependencyRemovalSource.includes('sc delete "%IPGUARD_SERVICE%"')) {
@@ -61,6 +66,11 @@ if (!dependencyRemovalSource.includes('will be kept')) {
 const serviceRemovalSource = fs.readFileSync(path.join(root, '3-stop-and-uninstall-service.bat'), 'utf8');
 if (!serviceRemovalSource.includes('sc delete ipguardservice.exe')) {
   throw new Error('Service removal must use the native Windows service deletion command.');
+}
+
+const trayManagerSource = fs.readFileSync(path.join(root, 'tray-manager.cs'), 'utf8');
+for (const detail of ['TrayStartupShortcut', 'ToggleTrayStartup', 'Auto-start enabled', 'add to Startup']) {
+  if (!trayManagerSource.includes(detail)) throw new Error(`tray-manager.cs is missing startup management: ${detail}`);
 }
 
 for (const name of ['config.json', 'config.example.json']) {
