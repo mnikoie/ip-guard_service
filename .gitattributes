@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.ttf binary
+
+# Exclude repository-only material from source archives.
+/.github export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore

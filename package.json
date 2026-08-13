@@ -1,0 +1,30 @@
+{
+  "name": "ip-guard-service",
+  "version": "1.0.0",
+  "description": "Fail-closed Windows service that permits configured apps only while public IP is in a trusted country.",
+  "license": "MIT",
+  "private": true,
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "windows-service",
+    "ip-monitoring",
+    "vpn",
+    "fail-closed",
+    "process-control"
+  ],
+  "scripts": {
+    "install-service": "node install-service.js",
+    "uninstall-service": "node uninstall-service.js",
+    "start": "node index.js",
+    "check": "node --check index.js",
+    "test": "node scripts/verify.js"
+  },
+  "dependencies": {
+    "node-windows": "^1.0.0-beta.8",
+    "axios": "^1.7.2",
+    "winston": "^3.13.0"
+  }
+}

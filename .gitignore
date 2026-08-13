@@ -1,0 +1,23 @@
+# Dependencies and package-manager diagnostics
+node_modules/
+npm-debug.log*
+
+# Local service state and logs
+*.log
+*.pid
+status.json
+ipguard.log
+
+# Local archives and Windows metadata
+*.zip
+desktop.ini
+Thumbs.db
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+*.suo
+
+# Keep the published configuration explicit; use config.local.json for personal experiments.
+config.local.json

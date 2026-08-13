@@ -1,0 +1,14 @@
+{
+  "checkIntervalMs": 5000,
+  "killIntervalMs": 100,
+  "requestTimeoutMs": 5000,
+  "ipApiEndpoints": [
+    "https://ipapi.co/json/",
+    "https://api.country.is/",
+    "http://ip-api.com/json/?fields=status,message,countryCode,query"
+  ],
+  "trustedCountryCodes": ["US", "GB", "CA", "DE", "FR", "NL", "AU", "JP", "KR", "SE", "CH", "IT", "ES", "TR", "AE"],
+  "processesToKill": ["ChatGPT.exe", "claude.exe", "Perplexity.exe", "Antigravity.exe", "Cursor.exe"],
+  "logFile": "C:\\ProgramData\\IPGuardService\\ipguard.log",
+  "statusFile": "C:\\ProgramData\\IPGuardService\\status.json"
+}
