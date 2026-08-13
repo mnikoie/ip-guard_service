@@ -19,6 +19,7 @@ It is useful for applications such as Claude, ChatGPT, Perplexity, Cursor, and s
 - Enforces **fail-closed** behavior: Iran, any untrusted/unknown country, API errors, timeouts, and no network all activate protection.
 - Force-closes configured executables with `taskkill /F /T` and checks again every 100 ms while unsafe.
 - Shows a compact, click-through desktop alert in the signed-in user session, separate from the Windows service.
+- Provides an optional system-tray control menu for installation, service operations, status, logs, and alert management.
 - Writes an atomic status file and concise logs; repeated lookup failures are not spammed into the log.
 
 ## Architecture
@@ -47,7 +48,8 @@ flowchart LR
 2. Run [`1-install-dependencies.bat`](1-install-dependencies.bat).
 3. Run [`2-install-service.bat`](2-install-service.bat) as **Administrator**.
 4. Run [`install-overlay.bat`](install-overlay.bat) once from the Windows account that should see the alert.
-5. Open [`5-view-log.bat`](5-view-log.bat) to view the current color-coded state.
+5. Run [`install-tray-manager.bat`](install-tray-manager.bat) to add the IP Guard shield icon beside the Windows clock.
+6. Open [`5-view-log.bat`](5-view-log.bat) to view the current color-coded state.
 
 Read the complete [English installation guide](docs/INSTALLATION.md) or [راهنمای نصب فارسی](docs/INSTALLATION.fa.md) before deploying this on a primary workstation.
 
@@ -77,6 +79,8 @@ After changing `config.json`, run [`4-restart-service.bat`](4-restart-service.ba
 | Display current state | `5-view-log.bat` |
 | Install desktop alert | `install-overlay.bat` |
 | Remove desktop alert | `uninstall-overlay.bat` |
+| Install tray control menu | `install-tray-manager.bat` |
+| Remove tray control menu | `uninstall-tray-manager.bat` |
 | Remove service | `3-stop-and-uninstall-service.bat` (Administrator) |
 | Validate source | `npm test` |
 | Run core manually | `npm start` |
@@ -85,6 +89,12 @@ The service status and logs are written under `C:\ProgramData\IPGuardService\`:
 
 - `status.json` — current `TRUSTED` or `UNSAFE` state used by the overlay/viewer.
 - `ipguard.log` — service events and successful process terminations.
+
+## System-tray control menu
+
+`install-tray-manager.bat` places an IP Guard shield icon in the Windows notification area (the area beside the clock; open the `^` overflow menu if Windows hides it). Right-click it for actions that map directly to the included batch files: dependency install, service install/remove/restart, current status, alert install/remove, config editing, and opening the project folder. Operations that modify the Windows service show the normal UAC confirmation.
+
+This is a notification-area icon rather than a pinned Taskbar button, because it stays available without a visible application window and supports a persistent right-click operations menu.
 
 ## Safety notes
 

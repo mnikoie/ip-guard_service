@@ -87,6 +87,14 @@ The raw files are:
 | `C:\ProgramData\IPGuardService\status.json` | Current service decision. |
 | `C:\ProgramData\IPGuardService\ipguard.log` | State changes, first lookup failure, recovery, successful kills. |
 
+## 7. Optional: install the tray control menu
+
+Run [`install-tray-manager.bat`](../install-tray-manager.bat). It creates a per-user Startup shortcut and launches an IP Guard shield icon in the Windows notification area beside the clock. If it is hidden, open the `^` overflow menu.
+
+Right-click the icon to run the existing maintenance actions. Service-install, service-restart, and service-removal actions explicitly request UAC elevation; the menu itself does not run elevated all the time.
+
+To remove it, run [`uninstall-tray-manager.bat`](../uninstall-tray-manager.bat).
+
 ## Updating configuration
 
 1. Edit `config.json`.

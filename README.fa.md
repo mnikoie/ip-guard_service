@@ -19,6 +19,7 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 - تکرار Kill هر ۱۰۰ میلی‌ثانیه در حالت ناامن
 - هشدار فارسی RTL با فونت Vazirmatn؛ بدون گرفتن فوکوس و بدون مسدودکردن کلیک برنامه‌های دیگر
 - نمایش رنگی آخرین وضعیت در `5-view-log.bat`
+- آیکون مدیریت در System Tray ویندوز با منوی راست‌کلیک برای همهٔ عملیات اصلی
 
 ## شروع سریع
 
@@ -26,7 +27,8 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 2. [`1-install-dependencies.bat`](1-install-dependencies.bat) را اجرا کنید.
 3. [`2-install-service.bat`](2-install-service.bat) را با **Run as administrator** اجرا کنید.
 4. برای فعال‌شدن هشدار گرافیکی، [`install-overlay.bat`](install-overlay.bat) را یک‌بار در حساب کاربری موردنظر اجرا کنید.
-5. برای دیدن آخرین وضعیت رنگی، [`5-view-log.bat`](5-view-log.bat) را اجرا کنید.
+5. [`install-tray-manager.bat`](install-tray-manager.bat) را اجرا کنید تا آیکون سپر IP Guard کنار ساعت ویندوز ایجاد شود.
+6. برای دیدن آخرین وضعیت رنگی، [`5-view-log.bat`](5-view-log.bat) را اجرا کنید.
 
 راهنمای کامل: [فارسی](docs/INSTALLATION.fa.md) | [English](docs/INSTALLATION.md)
 
@@ -42,6 +44,12 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 | `ipApiEndpoints` | APIهای lookup به‌ترتیب fallback. |
 
 پس از ویرایش `config.json`، [`4-restart-service.bat`](4-restart-service.bat) را با دسترسی Administrator اجرا کنید.
+
+## منوی آیکون کنار ساعت ویندوز
+
+با اجرای [`install-tray-manager.bat`](install-tray-manager.bat)، آیکون سپر IP Guard در **System Tray / Notification Area** کنار ساعت ویندوز قرار می‌گیرد. اگر آیکون دیده نشد، فلش `^` کنار ساعت را باز کنید. با راست‌کلیک روی آن می‌توانید نصب وابستگی‌ها، نصب/حذف/Restart سرویس، نمایش وضعیت، نصب/حذف Overlay، ویرایش تنظیمات و بازکردن پوشهٔ پروژه را انجام دهید.
+
+گزینه‌های مربوط به سرویس، پنجرهٔ تأیید Administrator ویندوز را نمایش می‌دهند. این آیکون عمداً در Notification Area است—not یک پنجرهٔ Taskbar—تا بدون بازماندن پنجرهٔ برنامه، همیشه در دسترس و دارای منوی راست‌کلیک باشد.
 
 ## نکات بسیار مهم
 

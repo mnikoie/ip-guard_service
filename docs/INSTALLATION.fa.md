@@ -89,6 +89,14 @@ Overlay فایل `C:\ProgramData\IPGuardService\status.json` را می‌خوا�
 | `C:\ProgramData\IPGuardService\status.json` | تصمیم فعلی سرویس. |
 | `C:\ProgramData\IPGuardService\ipguard.log` | تغییر وضعیت، اولین خطای lookup، recovery و Killهای موفق. |
 
+## ۷. نصب اختیاری منوی Tray
+
+[`install-tray-manager.bat`](../install-tray-manager.bat) را اجرا کنید. این فایل یک shortcut برای Startup همان کاربر می‌سازد و آیکون سپر IP Guard را در Notification Area کنار ساعت ویندوز اجرا می‌کند. اگر آیکون نمایش داده نشد، منوی `^` کنار ساعت را باز کنید.
+
+با راست‌کلیک، عملیات نگه‌داری موجود را اجرا کنید. نصب، Restart و حذف سرویس فقط هنگام انتخاب همان گزینه، UAC درخواست می‌کنند؛ خود منوی Tray همیشه با دسترسی Administrator اجرا نمی‌شود.
+
+برای حذف آیکون، [`uninstall-tray-manager.bat`](../uninstall-tray-manager.bat) را اجرا کنید.
+
 ## تغییر تنظیمات
 
 1. `config.json` را ویرایش کنید.
