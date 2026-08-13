@@ -36,6 +36,17 @@ IP Guard یک سرویس واقعی ویندوز با سیاست **fail-closed**
 
 ![راهنمای تصویری نصب و اجرای IP Guard](docs/images/quick-start-fa.png)
 
+[English visual quick-start guide](docs/images/quick-start-en.png)
+
+## دربارهٔ ما
+
+توسعه‌دهنده: **سید محمد علی نیکوئی**
+
+- تلفن: [09132675400](tel:+989132675400)
+- ایمیل: [m.nikoie2005@gmail.com](mailto:m.nikoie2005@gmail.com)
+
+جزئیات بیشتر: [دربارهٔ پروژه و تماس](docs/ABOUT.fa.md)
+
 ## تنظیمات مهم
 
 | کلید | کاربرد |

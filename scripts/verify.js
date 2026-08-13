@@ -14,6 +14,7 @@ const requiredFiles = [
   'uninstall-tray-manager.bat',
   'assets/ip-guard-ai.ico',
   'docs/images/quick-start-fa.png',
+  'docs/images/quick-start-en.png',
   'docs/ABOUT.md',
   'docs/ABOUT.fa.md',
   'install-overlay.bat',

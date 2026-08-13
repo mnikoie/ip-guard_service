@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$OutputPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'assets\ip-guard-ai.ico')
 )
 
@@ -13,56 +13,37 @@ using System.Collections.Generic;
 
 public static class IPGuardSimpleIcon
 {
-    private static GraphicsPath RoundedRect(float x, float y, float width, float height, float radius)
-    {
-        var path = new GraphicsPath();
-        path.AddArc(x, y, radius, radius, 180, 90);
-        path.AddArc(x + width - radius, y, radius, radius, 270, 90);
-        path.AddArc(x + width - radius, y + height - radius, radius, radius, 0, 90);
-        path.AddArc(x, y + height - radius, radius, radius, 90, 90);
-        path.CloseFigure();
-        return path;
-    }
-
     private static void DrawIcon(Graphics g, int size)
     {
         float s = size / 256f;
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+        g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
         g.Clear(Color.Transparent);
 
-        using (var shadow = new SolidBrush(Color.FromArgb(65, 2, 12, 38)))
-        using (var body = new SolidBrush(Color.FromArgb(255, 20, 39, 97)))
-        using (var rim = new Pen(Color.FromArgb(255, 66, 215, 255), 12 * s))
-        using (var circuit = new Pen(Color.FromArgb(255, 180, 246, 255), 9 * s))
-        using (var core = new SolidBrush(Color.FromArgb(255, 80, 229, 255)))
-        using (var node = new SolidBrush(Color.White))
+        using (var halo = new SolidBrush(Color.FromArgb(75, 42, 214, 255)))
+        using (var background = new SolidBrush(Color.FromArgb(255, 10, 30, 78)))
+        using (var rim = new Pen(Color.FromArgb(255, 83, 225, 255), 12 * s))
+        using (var letters = new SolidBrush(Color.White))
+        using (var spark = new SolidBrush(Color.FromArgb(255, 102, 239, 255)))
+        using (var font = new Font("Segoe UI", 108 * s, FontStyle.Bold, GraphicsUnit.Pixel))
         {
-            var shield = new PointF[] {
-                new PointF(128*s, 19*s), new PointF(219*s, 53*s), new PointF(205*s, 156*s),
-                new PointF(128*s, 230*s), new PointF(51*s, 156*s), new PointF(37*s, 53*s)
-            };
-            var shadowShield = new PointF[] {
-                new PointF(134*s, 28*s), new PointF(225*s, 62*s), new PointF(211*s, 165*s),
-                new PointF(134*s, 239*s), new PointF(57*s, 165*s), new PointF(43*s, 62*s)
-            };
-            g.FillPolygon(shadow, shadowShield);
-            g.FillPolygon(body, shield);
-            g.DrawPolygon(rim, shield);
+            g.FillEllipse(halo, 14*s, 14*s, 228*s, 228*s);
+            g.FillEllipse(background, 24*s, 24*s, 208*s, 208*s);
+            g.DrawEllipse(rim, 24*s, 24*s, 208*s, 208*s);
 
-            float cx = 128*s, cy = 128*s;
-            float r = 24*s;
-            g.FillEllipse(core, cx-r, cy-r, r*2, r*2);
-            var points = new PointF[] {
-                new PointF(86*s, 88*s), new PointF(170*s, 88*s),
-                new PointF(78*s, 158*s), new PointF(178*s, 158*s)
-            };
-            foreach (var point in points)
+            using (var format = new StringFormat())
             {
-                g.DrawLine(circuit, cx, cy, point.X, point.Y);
-                g.FillEllipse(node, point.X - 11*s, point.Y - 11*s, 22*s, 22*s);
+                format.Alignment = StringAlignment.Center;
+                format.LineAlignment = StringAlignment.Center;
+                g.DrawString("AI", font, letters, new RectangleF(27*s, 30*s, 202*s, 185*s), format);
             }
-            g.FillEllipse(node, cx - 7*s, cy - 7*s, 14*s, 14*s);
+
+            PointF[] star = new PointF[] {
+                new PointF(206*s, 38*s), new PointF(213*s, 55*s), new PointF(230*s, 62*s),
+                new PointF(213*s, 69*s), new PointF(206*s, 86*s), new PointF(199*s, 69*s),
+                new PointF(182*s, 62*s), new PointF(199*s, 55*s)
+            };
+            g.FillPolygon(spark, star);
         }
     }
 

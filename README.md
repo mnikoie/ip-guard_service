@@ -55,9 +55,20 @@ Read the complete [English installation guide](docs/INSTALLATION.md) or [راه�
 
 ## Visual quick start
 
-The illustrated four-step guide is available in Persian below and in [the installation documentation](docs/INSTALLATION.fa.md):
+The illustrated four-step guides are available in English and Persian:
+
+![English quick-start guide](docs/images/quick-start-en.png)
 
 ![Persian quick-start guide](docs/images/quick-start-fa.png)
+
+## About
+
+Developed by **Seyed Mohammad Ali Nikoei**.
+
+- Phone: [+98 913 267 5400](tel:+989132675400)
+- Email: [m.nikoie2005@gmail.com](mailto:m.nikoie2005@gmail.com)
+
+More details: [About and contact](docs/ABOUT.md).
 
 ## Configuration
 

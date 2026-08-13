@@ -20,7 +20,7 @@ cd ip-guard-service
 
 Replace the placeholder repository URL with the URL of your fork/repository.
 
-For a Persian illustrated four-step installation guide, see [quick-start image](images/quick-start-fa.png).
+See the illustrated four-step installation guides: [English](images/quick-start-en.png) and [Persian RTL](images/quick-start-fa.png).
 
 ## 2. Configure the guard
 
