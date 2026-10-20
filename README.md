@@ -161,3 +161,8 @@ The project source is released under the [MIT License](LICENSE). Vazirmatn font 
 Questions, bug reports and suggestions are welcome in [Issues](https://github.com/mnikoie/ip-guard_service/issues). Include your operating system or browser version, steps to reproduce the problem, and the expected and actual result. Reports in Persian and English are welcome. Please remove private data before attaching sample files or logs.
 
 برای گزارش مشکل یا پیشنهاد، از بخش Issues استفاده کنید و مراحل بروز مشکل، نسخهٔ سیستم‌عامل یا مرورگر و نتیجهٔ مورد انتظار را بنویسید. گزارش فارسی و انگلیسی پذیرفته می‌شود؛ داده‌های خصوصی را از فایل نمونه و لاگ حذف کنید.
+
+
+## Project introduction on DEV
+
+[Read the English introduction](https://dev.to/mnikoie/ip-guard-service-close-selected-windows-apps-when-the-ip-country-is-untrusted-26cp).
