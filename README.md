@@ -154,3 +154,10 @@ This is a notification-area icon rather than a pinned Taskbar button, because it
 ## License
 
 The project source is released under the [MIT License](LICENSE). Vazirmatn font files are included under the [SIL Open Font License 1.1](licenses/OFL-1.1.txt); see [third-party notices](THIRD_PARTY_NOTICES.md).
+
+
+## Feedback / بازخورد
+
+Questions, bug reports and suggestions are welcome in [Issues](https://github.com/mnikoie/ip-guard_service/issues). Include your operating system or browser version, steps to reproduce the problem, and the expected and actual result. Reports in Persian and English are welcome. Please remove private data before attaching sample files or logs.
+
+برای گزارش مشکل یا پیشنهاد، از بخش Issues استفاده کنید و مراحل بروز مشکل، نسخهٔ سیستم‌عامل یا مرورگر و نتیجهٔ مورد انتظار را بنویسید. گزارش فارسی و انگلیسی پذیرفته می‌شود؛ داده‌های خصوصی را از فایل نمونه و لاگ حذف کنید.
